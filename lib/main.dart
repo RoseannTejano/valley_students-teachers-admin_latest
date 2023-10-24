@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
         Routes().schedulescreen: (context) => ScheduleScreen(),
         Routes().mainhome: (context) => MainHomeScreen(),
         Routes().teacherlist: (context) => TeachersListScreen(),
-        Routes().workload: (context) => WorkloadScreen()
+        Routes().workload: (context) => const WorkloadScreen()
       },
     );
   }

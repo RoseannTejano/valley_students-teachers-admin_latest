@@ -1,8 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:valley_students_and_teachers/services/add_user.dart';
 import 'package:valley_students_and_teachers/widgets/textfield_widget.dart';
+import 'package:valley_students_and_teachers/widgets/toast_widget.dart';
 
-import '../../services/add_user.dart';
 import '../../utils/routes.dart';
 import '../../widgets/button_widget.dart';
 import '../../widgets/text_widget.dart';
@@ -15,7 +16,7 @@ class TeachersLoginScreen extends StatefulWidget {
 }
 
 class _TeachersLoginScreenState extends State<TeachersLoginScreen> {
-  final idcontroller = TextEditingController();
+  final emailcontroller = TextEditingController();
   final passwordcontroller = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -55,7 +56,7 @@ class _TeachersLoginScreenState extends State<TeachersLoginScreen> {
                           height: 200,
                         ),
                         TextFieldWidget(
-                            label: 'ID Number', controller: idcontroller),
+                            label: 'Email', controller: emailcontroller),
                         const SizedBox(
                           height: 10,
                         ),
@@ -64,6 +65,111 @@ class _TeachersLoginScreenState extends State<TeachersLoginScreen> {
                             isPassword: true,
                             label: 'Password',
                             controller: passwordcontroller),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 200),
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: TextButton(
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: ((context) {
+                                    final formKey = GlobalKey<FormState>();
+                                    final TextEditingController
+                                        emailControllernew =
+                                        TextEditingController();
+
+                                    return AlertDialog(
+                                      backgroundColor: Colors.grey[100],
+                                      title: TextRegular(
+                                        text: 'Forgot Password',
+                                        fontSize: 14,
+                                        color: Colors.black,
+                                      ),
+                                      content: Form(
+                                        key: formKey,
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            TextFieldWidget(
+                                              hint: 'Email',
+                                              inputType:
+                                                  TextInputType.emailAddress,
+                                              label: 'Email',
+                                              controller: emailControllernew,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: (() {
+                                            Navigator.pop(context);
+                                          }),
+                                          child: TextRegular(
+                                            text: 'Cancel',
+                                            fontSize: 12,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                        TextButton(
+                                          onPressed: (() async {
+                                            if (formKey.currentState!
+                                                .validate()) {
+                                              try {
+                                                Navigator.pop(context);
+                                                await FirebaseAuth.instance
+                                                    .sendPasswordResetEmail(
+                                                        email:
+                                                            emailControllernew
+                                                                .text);
+                                                showToast(
+                                                    'Password reset link sent to ${emailControllernew.text}');
+                                              } catch (e) {
+                                                String errorMessage = '';
+
+                                                if (e is FirebaseException) {
+                                                  switch (e.code) {
+                                                    case 'invalid-email':
+                                                      errorMessage =
+                                                          'The email address is invalid.';
+                                                      break;
+                                                    case 'user-not-found':
+                                                      errorMessage =
+                                                          'The user associated with the email address is not found.';
+                                                      break;
+                                                    default:
+                                                      errorMessage =
+                                                          'An error occurred while resetting the password.';
+                                                  }
+                                                } else {
+                                                  errorMessage =
+                                                      'An error occurred while resetting the password.';
+                                                }
+
+                                                showToast(errorMessage);
+                                                Navigator.pop(context);
+                                              }
+                                            }
+                                          }),
+                                          child: TextBold(
+                                            text: 'Continue',
+                                            fontSize: 14,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  }),
+                                );
+                              },
+                              child: TextRegular(
+                                  text: 'Forgot Password?',
+                                  fontSize: 12,
+                                  color: Colors.black),
+                            ),
+                          ),
+                        ),
                         const SizedBox(
                           height: 50,
                         ),
@@ -74,7 +180,15 @@ class _TeachersLoginScreenState extends State<TeachersLoginScreen> {
                           color: Colors.white,
                           label: 'Login',
                           onPressed: () {
-                            login();
+                            final email = emailcontroller.text;
+                            final password = passwordcontroller.text;
+                            if (isValidEmail(email) &&
+                                isValidPassword(password)) {
+                              login();
+                            } else {
+                              showToast(
+                                  'Invalid email and password combination!');
+                            }
                           },
                         ),
                         const SizedBox(
@@ -104,7 +218,7 @@ class _TeachersLoginScreenState extends State<TeachersLoginScreen> {
 
   final nameController = TextEditingController();
 
-  final idnumberController = TextEditingController();
+  final emailController = TextEditingController();
 
   final passwordController = TextEditingController();
 
@@ -129,7 +243,7 @@ class _TeachersLoginScreenState extends State<TeachersLoginScreen> {
                         height: 10,
                       ),
                       TextFieldWidget(
-                          label: 'ID Number', controller: idnumberController),
+                          label: 'Email', controller: emailController),
                       const SizedBox(
                         height: 10,
                       ),
@@ -145,42 +259,49 @@ class _TeachersLoginScreenState extends State<TeachersLoginScreen> {
                           color: Colors.black,
                           label: 'Register',
                           onPressed: (() async {
-                            try {
-                              await FirebaseAuth.instance
-                                  .createUserWithEmailAndPassword(
-                                      email:
-                                          '${idnumberController.text}@teacher.com',
-                                      password: passwordController.text);
-                              // addUser(
-                              //     newNameController
-                              //         .text,
-                              //     newEmailController
-                              //         .text,
-                              //     newPassController
-                              //         .text);
-                              addUser(
-                                  nameController.text,
-                                  '${idnumberController.text}@teacher.com',
-                                  passwordController.text,
-                                  'Teacher');
-                              Navigator.pop(context);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: TextRegular(
-                                      text: 'Account created succesfully!',
-                                      fontSize: 14,
-                                      color: Colors.white),
-                                ),
-                              );
-                            } catch (e) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: TextRegular(
-                                      text: e.toString(),
-                                      fontSize: 14,
-                                      color: Colors.white),
-                                ),
-                              );
+                            final email = emailController.text;
+                            final password = passwordController.text;
+                            if (isValidEmail(email) &&
+                                isValidPassword(password)) {
+                              try {
+                                await FirebaseAuth.instance
+                                    .createUserWithEmailAndPassword(
+                                        email: emailController.text,
+                                        password: passwordController.text);
+                                // addUser(
+                                //     newNameController
+                                //         .text,
+                                //     newEmailController
+                                //         .text,
+                                //     newPassController
+                                //         .text);
+                                addUser(
+                                    nameController.text,
+                                    emailController.text,
+                                    passwordController.text,
+                                    'Teacher');
+                                Navigator.pop(context);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: TextRegular(
+                                        text: 'Account created succesfully!',
+                                        fontSize: 14,
+                                        color: Colors.white),
+                                  ),
+                                );
+                              } catch (e) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: TextRegular(
+                                        text: e.toString(),
+                                        fontSize: 14,
+                                        color: Colors.white),
+                                  ),
+                                );
+                              }
+                            } else {
+                              showToast(
+                                  'Invalid email and password combination!');
                             }
                           })),
                     ],
@@ -193,10 +314,9 @@ class _TeachersLoginScreenState extends State<TeachersLoginScreen> {
   login() async {
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: '${idcontroller.text}@teacher.com',
-          password: passwordcontroller.text);
+          email: emailcontroller.text, password: passwordcontroller.text);
 
-      Navigator.pushReplacementNamed(context, Routes().teacherhomescreen);
+      Navigator.pushReplacementNamed(context, Routes().studenthomescreen);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -205,5 +325,19 @@ class _TeachersLoginScreenState extends State<TeachersLoginScreen> {
         ),
       );
     }
+  }
+
+  bool isValidEmail(String email) {
+    // Validate email using a regular expression for CSPC email format.
+    final emailRegExp = RegExp(r'^[a-zA-Z0-9._%+-]+@cspc\.edu$');
+    return emailRegExp.hasMatch(email);
+  }
+
+  bool isValidPassword(String password) {
+    // Check if password has at least 8 characters and contains a combination of upper, lower, and a number.
+    return password.length >= 8 &&
+        password.contains(RegExp(r'[A-Z]')) &&
+        password.contains(RegExp(r'[a-z]')) &&
+        password.contains(RegExp(r'[0-9]'));
   }
 }
