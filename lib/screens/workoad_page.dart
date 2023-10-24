@@ -107,6 +107,7 @@ class _WorkloadScreenState extends State<WorkloadScreen> {
                                               data.docs[i]['date'].toDate()),
                                       'id': data.docs[i].id,
                                       'details': data.docs[i]['details'],
+                                      'section': data.docs[i]['section'],
                                     },
                                 ],
                               );

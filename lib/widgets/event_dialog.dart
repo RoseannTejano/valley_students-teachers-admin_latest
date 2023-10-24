@@ -165,6 +165,10 @@ class _EventDialogState extends State<EventDialog> {
                       'Description: ${widget.events[index]['details']}',
                       style: const TextStyle(color: Colors.grey, fontSize: 12),
                     ),
+                    Text(
+                      'Section: ${widget.events[index]['section']}',
+                      style: const TextStyle(color: Colors.grey, fontSize: 12),
+                    ),
                   ],
                 ),
                 subtitle: Text(widget.events[index]['date']),
