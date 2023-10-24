@@ -329,8 +329,12 @@ class _StudentsLoginScreenState extends State<StudentsLoginScreen> {
 
   bool isValidEmail(String email) {
     // Validate email using a regular expression for CSPC email format.
-    final emailRegExp = RegExp(r'^[a-zA-Z0-9._%+-]+@cspc\.edu$');
-    return emailRegExp.hasMatch(email);
+
+    if (email.contains('cspc')) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   bool isValidPassword(String password) {

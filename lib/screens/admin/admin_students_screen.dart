@@ -32,7 +32,7 @@ class _AdminStudentsScreenState extends State<AdminStudentsScreen> {
             child: Column(
               children: [
                 TextBold(
-                  text: 'Student Reversations',
+                  text: 'Student Reservations',
                   fontSize: 24,
                   color: Colors.black,
                 ),
@@ -81,16 +81,35 @@ class _AdminStudentsScreenState extends State<AdminStudentsScreen> {
                                           '${data.docs[index]['date']} - ${data.docs[index]['time']}',
                                       fontSize: 14,
                                       color: Colors.grey),
-                                  trailing: IconButton(
-                                    onPressed: () async {
-                                      await FirebaseFirestore.instance
-                                          .collection('Reservations')
-                                          .doc(data.docs[index].id)
-                                          .update({'status': 'Accepted'});
-                                      showToast('Reservation approved!');
-                                    },
-                                    icon: const Icon(
-                                      Icons.check_circle,
+                                  trailing: SizedBox(
+                                    width: 100,
+                                    child: Row(
+                                      children: [
+                                        IconButton(
+                                          onPressed: () async {
+                                            await FirebaseFirestore.instance
+                                                .collection('Reservations')
+                                                .doc(data.docs[index].id)
+                                                .update({'status': 'Accepted'});
+                                            showToast('Reservation approved!');
+                                          },
+                                          icon: const Icon(
+                                            Icons.check_circle,
+                                          ),
+                                        ),
+                                        IconButton(
+                                          onPressed: () async {
+                                            await FirebaseFirestore.instance
+                                                .collection('Reservations')
+                                                .doc(data.docs[index].id)
+                                                .update({'status': 'Decline'});
+                                            showToast('Reservation declined!');
+                                          },
+                                          icon: const Icon(
+                                            Icons.close,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 );

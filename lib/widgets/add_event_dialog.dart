@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:valley_students_and_teachers/services/add_events.dart';
-import 'package:valley_students_and_teachers/widgets/text_widget.dart';
 
 class AddEventDialog extends StatefulWidget {
   const AddEventDialog({super.key});
@@ -13,6 +12,7 @@ class AddEventDialog extends StatefulWidget {
 class _AddEventDialogState extends State<AddEventDialog> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController sectionController = TextEditingController();
   DateTime _selectedDate = DateTime.now();
 
   List<String> districts = [
@@ -47,6 +47,14 @@ class _AddEventDialogState extends State<AddEventDialog> {
               controller: _descriptionController,
               decoration: const InputDecoration(
                 hintText: 'Workload Description',
+              ),
+              maxLines: null,
+            ),
+            const SizedBox(height: 16.0),
+            TextField(
+              controller: sectionController,
+              decoration: const InputDecoration(
+                hintText: 'Section',
               ),
               maxLines: null,
             ),
@@ -103,8 +111,8 @@ class _AddEventDialogState extends State<AddEventDialog> {
             String description = _descriptionController.text;
             DateTime date = _selectedDate;
 
-            addEvents(
-                title, description, date, date.day, date.month, date.year);
+            addEvents(title, description, date, date.day, date.month, date.year,
+                sectionController.text);
 
             Navigator.of(context).pop();
           },

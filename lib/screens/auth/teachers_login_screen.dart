@@ -261,6 +261,8 @@ class _TeachersLoginScreenState extends State<TeachersLoginScreen> {
                           onPressed: (() async {
                             final email = emailController.text;
                             final password = passwordController.text;
+
+                            print(isValidEmail(email));
                             if (isValidEmail(email) &&
                                 isValidPassword(password)) {
                               try {
@@ -329,8 +331,12 @@ class _TeachersLoginScreenState extends State<TeachersLoginScreen> {
 
   bool isValidEmail(String email) {
     // Validate email using a regular expression for CSPC email format.
-    final emailRegExp = RegExp(r'^[a-zA-Z0-9._%+-]+@cspc\.edu$');
-    return emailRegExp.hasMatch(email);
+
+    if (email.contains('cspc')) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   bool isValidPassword(String password) {
