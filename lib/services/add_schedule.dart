@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:valley_students_and_teachers/services/add_notif.dart';
 
 Future addSchedule(name, section, day, timeFrom, timeTo) async {
   final docUser = FirebaseFirestore.instance.collection('Schedules').doc();
@@ -13,6 +14,8 @@ Future addSchedule(name, section, day, timeFrom, timeTo) async {
     'userId': FirebaseAuth.instance.currentUser!.uid,
     'dateTime': DateTime.now(),
   };
+
+  addNotif(name, '$name added a consultation');
 
   await docUser.set(json);
 }
