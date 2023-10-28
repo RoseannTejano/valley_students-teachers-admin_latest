@@ -12,7 +12,7 @@ Future addUser(name, idNumber, password, role) async {
     'password': password,
     'role': role,
     'avail': '',
-    'isActive': true
+    'isActive': true,
   };
 
   await docUser.set(json);

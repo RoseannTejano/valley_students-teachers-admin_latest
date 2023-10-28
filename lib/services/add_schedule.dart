@@ -15,7 +15,8 @@ Future addSchedule(name, section, day, timeFrom, timeTo) async {
     'dateTime': DateTime.now(),
   };
 
-  addNotif(name, '$name added a consultation');
+  addNotif(name, '$name added a consultation',
+      FirebaseAuth.instance.currentUser!.uid);
 
   await docUser.set(json);
 }

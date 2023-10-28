@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:valley_students_and_teachers/services/add_notif.dart';
 import 'package:valley_students_and_teachers/widgets/text_widget.dart';
 import 'package:valley_students_and_teachers/widgets/toast_widget.dart';
 
@@ -92,6 +93,10 @@ class _AdminStudentsScreenState extends State<AdminStudentsScreen> {
                                                 .doc(data.docs[index].id)
                                                 .update({'status': 'Accepted'});
                                             showToast('Reservation approved!');
+                                            addNotif(
+                                                data.docs[index]['name'],
+                                                'Admin approved your reservation',
+                                                data.docs[index]['userId']);
                                           },
                                           icon: const Icon(
                                             Icons.check_circle,
@@ -104,6 +109,10 @@ class _AdminStudentsScreenState extends State<AdminStudentsScreen> {
                                                 .doc(data.docs[index].id)
                                                 .update({'status': 'Decline'});
                                             showToast('Reservation declined!');
+                                            addNotif(
+                                                data.docs[index]['name'],
+                                                'Admin declined your reservation',
+                                                data.docs[index]['userId']);
                                           },
                                           icon: const Icon(
                                             Icons.close,

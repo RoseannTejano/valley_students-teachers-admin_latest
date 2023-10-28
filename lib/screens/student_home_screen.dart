@@ -6,6 +6,7 @@ import 'package:valley_students_and_teachers/widgets/button_widget.dart';
 import 'package:valley_students_and_teachers/widgets/reservation_dialog.dart';
 import 'package:valley_students_and_teachers/widgets/text_widget.dart';
 import 'package:intl/intl.dart' show DateFormat, toBeginningOfSentenceCase;
+import 'package:valley_students_and_teachers/widgets/textfield_widget.dart';
 
 import '../services/add_chatroom.dart';
 
@@ -29,6 +30,9 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
   String myId = '';
 
   String myRole = '';
+
+  final emailController = TextEditingController();
+  final nameController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -102,9 +106,79 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                           height: 10,
                         ),
                         TextBold(
-                          text: data['idNumber'].split('@')[0],
+                          text: data['idNumber'],
                           fontSize: 18,
                           color: Colors.white,
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            setState(() {
+                              nameController.text = data['name'];
+                              emailController.text = data['idNumber'];
+                            });
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: TextBold(
+                                      text: 'Edit Profile',
+                                      fontSize: 18,
+                                      color: Colors.black),
+                                  content: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      TextFieldWidget(
+                                        label: 'Name',
+                                        controller: nameController,
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      TextFieldWidget(
+                                        label: 'Email',
+                                        controller: emailController,
+                                      ),
+                                    ],
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: TextBold(
+                                          text: 'Close',
+                                          fontSize: 14,
+                                          color: Colors.black),
+                                    ),
+                                    TextButton(
+                                      onPressed: () async {
+                                        await FirebaseFirestore.instance
+                                            .collection('Users')
+                                            .doc(data.id)
+                                            .update({
+                                          'name': nameController.text,
+                                          'idNumber': emailController.text,
+                                        });
+                                        Navigator.pop(context);
+                                      },
+                                      child: TextBold(
+                                          text: 'Save',
+                                          fontSize: 14,
+                                          color: Colors.black),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                          child: TextBold(
+                            text: 'Edit Profle',
+                            fontSize: 12,
+                            color: Colors.white,
+                          ),
                         ),
                         const SizedBox(
                           height: 50,
@@ -617,11 +691,9 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
         children: [
           StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
-                  .collection('Chats')
-                  .where('membersId',
+                  .collection('Notif')
+                  .where('userId',
                       arrayContains: FirebaseAuth.instance.currentUser!.uid)
-                  .where('creator',
-                      isNotEqualTo: FirebaseAuth.instance.currentUser!.uid)
                   .snapshots(),
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -659,26 +731,21 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                         return [
                           for (int i = 0; i < data.docs.length; i++)
                             PopupMenuItem(
-                                onTap: () {
-                                  chatroomDialog(data.docs[i].id);
-                                  chatroomDialog(data.docs[i].id);
-                                },
                                 child: ListTile(
-                                  leading: const Icon(
-                                    Icons.notifications,
-                                    color: Colors.black,
-                                  ),
-                                  title: TextBold(
-                                      text:
-                                          'You have been added to a consultation',
-                                      fontSize: 16,
-                                      color: Colors.black),
-                                  subtitle: TextRegular(
-                                      text: DateFormat.yMMMd().add_jm().format(
-                                          data.docs[i]['dateTime'].toDate()),
-                                      fontSize: 12,
-                                      color: Colors.black),
-                                ))
+                              leading: const Icon(
+                                Icons.notifications,
+                                color: Colors.black,
+                              ),
+                              title: TextBold(
+                                  text: data.docs[i]['name'],
+                                  fontSize: 16,
+                                  color: Colors.black),
+                              subtitle: TextRegular(
+                                  text: DateFormat.yMMMd().add_jm().format(
+                                      data.docs[i]['dateTime'].toDate()),
+                                  fontSize: 12,
+                                  color: Colors.black),
+                            ))
                         ];
                       },
                     ));
