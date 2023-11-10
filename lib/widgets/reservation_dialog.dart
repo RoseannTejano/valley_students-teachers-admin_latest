@@ -20,7 +20,7 @@ class _ReservationDialogState extends State<ReservationDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: const Text(
-        'Make a Reservation',
+        'Laboratory Reservation',
         style: TextStyle(
           fontFamily: 'QRegular',
           fontSize: 18,
@@ -40,7 +40,7 @@ class _ReservationDialogState extends State<ReservationDialog> {
                 return null;
               },
               decoration: const InputDecoration(
-                labelText: 'Reservation Name',
+                labelText: 'Name of Requestor/Group Name',
               ),
             ),
             const SizedBox(height: 16),
@@ -130,7 +130,7 @@ class _ReservationDialogState extends State<ReservationDialog> {
               launchEmail(
                   mailPath: 'roseanntejanoo3021@gmail.com',
                   body:
-                      'Reservation Name: ${_nameController.text}\nI wanted to make a reservation on ${DateFormat('yyyy-MM-dd').format(_selectedDate!)} at _selectedTime!.format(context))',
+                      'Name of Requestor/Group Name: ${_nameController.text}\nI wanted to make a reservation on ${DateFormat('yyyy-MM-dd').format(_selectedDate!)} at _selectedTime!.format(context))',
                   subject: 'Requesting a reservation');
               Navigator.of(context).pop();
             }

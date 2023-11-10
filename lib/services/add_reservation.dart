@@ -8,6 +8,7 @@ Future addReservation(name, date, time) async {
     'name': name,
     'date': date,
     'time': time,
+    
     'userId': FirebaseAuth.instance.currentUser!.uid,
     'dateTime': DateTime.now(),
     'status': 'Pending'
