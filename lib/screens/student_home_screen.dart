@@ -5,8 +5,8 @@ import 'package:valley_students_and_teachers/utils/routes.dart';
 import 'package:valley_students_and_teachers/widgets/button_widget.dart';
 import 'package:valley_students_and_teachers/widgets/reservation_dialog.dart';
 import 'package:valley_students_and_teachers/widgets/text_widget.dart';
-import 'package:intl/intl.dart' show DateFormat, toBeginningOfSentenceCase;
 import 'package:valley_students_and_teachers/widgets/textfield_widget.dart';
+import 'package:intl/intl.dart' show DateFormat, toBeginningOfSentenceCase;
 
 import '../services/add_chatroom.dart';
 
@@ -40,7 +40,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
         height: double.infinity,
         width: double.infinity,
         decoration: const BoxDecoration(
-          color: Colors.white,
+          color: Color.fromARGB(255, 0, 48, 54),
           image: DecorationImage(
             opacity: 200,
             image: AssetImage(
@@ -175,7 +175,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                             );
                           },
                           child: TextBold(
-                            text: 'Edit Profle',
+                            text: 'Edit Profile',
                             fontSize: 12,
                             color: Colors.white,
                           ),

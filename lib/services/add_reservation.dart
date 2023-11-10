@@ -1,13 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-Future addReservation(name, date, time) async {
+Future addReservation(name, date, timeFrom, timeTo) async {
   final docUser = FirebaseFirestore.instance.collection('Reservations').doc();
 
   final json = {
     'name': name,
     'date': date,
-    'time': time,
+    'timeFrom': timeFrom,
+    'timeTo': timeTo,
+
+
     
     'userId': FirebaseAuth.instance.currentUser!.uid,
     'dateTime': DateTime.now(),
