@@ -14,14 +14,13 @@ class _ReservationDialogState extends State<ReservationDialog> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
   DateTime? _selectedDate;
-  TimeOfDay? _timeFrom;
-  TimeOfDay? _timeTo;
+  TimeOfDay? _selectedTime;
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       title: const Text(
-        'Laboratory Reservation',
+        'Make a Reservation',
         style: TextStyle(
           fontFamily: 'QRegular',
           fontSize: 18,
@@ -41,7 +40,7 @@ class _ReservationDialogState extends State<ReservationDialog> {
                 return null;
               },
               decoration: const InputDecoration(
-                labelText: 'Name of Requestor/Group Name',
+                labelText: 'Reservation Name',
               ),
             ),
             const SizedBox(height: 16),
@@ -78,9 +77,9 @@ class _ReservationDialogState extends State<ReservationDialog> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  _timeFrom == null
-                      ? 'Time From'
-                      : 'Time: ${_timeFrom!.format(context)}',
+                  _selectedTime == null
+                      ? 'Select Time'
+                      : 'Time: ${_selectedTime!.format(context)}',
                   style: const TextStyle(
                     fontFamily: 'QRegular',
                     fontSize: 14,
@@ -99,45 +98,12 @@ class _ReservationDialogState extends State<ReservationDialog> {
                       fontSize: 14,
                     ),
                   ),
-                
-            const SizedBox(height: 16),
-              Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [                
-                Text(
-                  _timeTo == null
-                      ? 'Time To'
-                      : 'Time: ${_timeTo!.format(context)}',
-                  style: const TextStyle(
-                    fontFamily: 'QRegular',
-                    fontSize: 14,
-                  ),
                 ),
-                ElevatedButton(
-                  style: const ButtonStyle(
-                      backgroundColor: MaterialStatePropertyAll(Colors.black)),
-                  onPressed: () {
-                    _pickTimeTo(context);
-                  },
-                  child: const Text(
-                    'Pick Time',
-                    style: TextStyle(
-                      fontFamily: 'QRegular',
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
-              ],
-                ),
-                ),
-            
               ],
             ),
           ],
         ),
-    
       ),
-    
       actions: [
         TextButton(
           onPressed: () {
@@ -155,17 +121,16 @@ class _ReservationDialogState extends State<ReservationDialog> {
           onPressed: () {
             if (_formKey.currentState!.validate() &&
                 _selectedDate != null &&
-                _timeFrom != null) {
+                _selectedTime != null) {
               addReservation(
                   _nameController.text,
                   DateFormat('yyyy-MM-dd').format(_selectedDate!),
-                  _timeFrom!.format(context),
-                  _timeTo!.format(context));
+                  _selectedTime!.format(context));
 
               launchEmail(
                   mailPath: 'roseanntejanoo3021@gmail.com',
                   body:
-                      'Name of Requestor/Group Name: ${_nameController.text}\nI wanted to make a reservation on ${DateFormat('yyyy-MM-dd').format(_selectedDate!)} at _selectedTime!.format(context))',
+                      'Reservation Name: ${_nameController.text}\nI wanted to make a reservation on ${DateFormat('yyyy-MM-dd').format(_selectedDate!)} at _selectedTime!.format(context))',
                   subject: 'Requesting a reservation');
               Navigator.of(context).pop();
             }
@@ -214,27 +179,13 @@ class _ReservationDialogState extends State<ReservationDialog> {
   Future<void> _pickTime(BuildContext context) async {
     TimeOfDay? pickedTime = await showTimePicker(
       context: context,
-      initialTime: _timeFrom ?? TimeOfDay.now(),
+      initialTime: _selectedTime ?? TimeOfDay.now(),
     );
 
-    if (pickedTime != null && pickedTime != _timeFrom) {
+    if (pickedTime != null && pickedTime != _selectedTime) {
       setState(() {
-        _timeFrom = pickedTime;
-      });
-    }
-  }
-
-   Future<void> _pickTimeTo(BuildContext context) async {
-    TimeOfDay? pickedTimeTo = await showTimePicker(
-      context: context,
-      initialTime: _timeTo ?? TimeOfDay.now(),
-    );
-
-    if (pickedTimeTo != null && pickedTimeTo != _timeTo) {
-      setState(() {
-        _timeTo = pickedTimeTo;
+        _selectedTime = pickedTime;
       });
     }
   }
 }
-
