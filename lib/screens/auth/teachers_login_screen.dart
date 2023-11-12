@@ -318,7 +318,7 @@ class _TeachersLoginScreenState extends State<TeachersLoginScreen> {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: emailcontroller.text, password: passwordcontroller.text);
 
-      Navigator.pushReplacementNamed(context, Routes().studenthomescreen);
+      Navigator.pushReplacementNamed(context, Routes().teacherhomescreen);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
