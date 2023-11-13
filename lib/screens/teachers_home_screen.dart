@@ -59,6 +59,10 @@ class _TeachersHomeScreenState extends State<TeachersHomeScreen> {
   String myId = '';
 
   String myRole = '';
+
+  final emailController = TextEditingController();
+  final nameController = TextEditingController();
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -137,9 +141,79 @@ class _TeachersHomeScreenState extends State<TeachersHomeScreen> {
                           height: 10,
                         ),
                         TextBold(
-                          text: data['idNumber'].split('@')[0],
+                          text: data['idNumber'],
                           fontSize: 18,
                           color: Colors.white,
+                        ),
+                        const SizedBox(
+                          height: 50,
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            setState(() {
+                              nameController.text = data['name'];
+                              emailController.text = data['idNumber'];
+                            });
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: TextBold(
+                                      text: 'Edit Profile',
+                                      fontSize: 18,
+                                      color: Colors.black),
+                                  content: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      TextFieldWidget(
+                                        label: 'Name',
+                                        controller: nameController,
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      TextFieldWidget(
+                                        label: 'Email',
+                                        controller: emailController,
+                                      ),
+                                    ],
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: TextBold(
+                                          text: 'Close',
+                                          fontSize: 14,
+                                          color: Colors.black),
+                                    ),
+                                    TextButton(
+                                      onPressed: () async {
+                                        await FirebaseFirestore.instance
+                                            .collection('Users')
+                                            .doc(data.id)
+                                            .update({
+                                          'name': nameController.text,
+                                          'idNumber': emailController.text,
+                                        });
+                                        Navigator.pop(context);
+                                      },
+                                      child: TextBold(
+                                          text: 'Save',
+                                          fontSize: 14,
+                                          color: Colors.black),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                          child: TextBold(
+                            text: 'Edit Profile',
+                            fontSize: 12,
+                            color: Colors.white,
+                          ),
                         ),
                         const SizedBox(
                           height: 50,
