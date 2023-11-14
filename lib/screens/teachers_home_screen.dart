@@ -62,7 +62,9 @@ class _TeachersHomeScreenState extends State<TeachersHomeScreen> {
 
   final emailController = TextEditingController();
   final nameController = TextEditingController();
-  
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -142,7 +144,7 @@ class _TeachersHomeScreenState extends State<TeachersHomeScreen> {
                         ),
                         TextBold(
                           text: data['idNumber'],
-                          fontSize: 18,
+                          fontSize: 15,
                           color: Colors.white,
                         ),
                         const SizedBox(
@@ -177,6 +179,7 @@ class _TeachersHomeScreenState extends State<TeachersHomeScreen> {
                                         controller: emailController,
                                       ),
                                     ],
+                                  
                                   ),
                                   actions: [
                                     TextButton(
