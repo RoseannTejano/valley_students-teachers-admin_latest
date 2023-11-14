@@ -9,6 +9,7 @@ import 'package:valley_students_and_teachers/widgets/schedule_dialog.dart';
 import 'package:valley_students_and_teachers/widgets/text_widget.dart';
 import 'package:valley_students_and_teachers/widgets/textfield_widget.dart';
 import 'package:valley_students_and_teachers/widgets/toast_widget.dart';
+
 class TeachersHomeScreen extends StatefulWidget {
   const TeachersHomeScreen({super.key});
   @override
@@ -74,7 +75,7 @@ class _TeachersHomeScreenState extends State<TeachersHomeScreen> {
         height: double.infinity,
         width: double.infinity,
         decoration: const BoxDecoration(
-          color: Colors.white,
+          color: Color.fromARGB(255, 0, 0, 0),
           image: DecorationImage(
             opacity: 200,
              image: AssetImage(
@@ -102,7 +103,7 @@ class _TeachersHomeScreenState extends State<TeachersHomeScreen> {
                     height: double.infinity,
                     width: 400,
                     decoration: const BoxDecoration(
-                      color: Colors.black,
+                      color: Color.fromARGB(143, 0, 0, 0),
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -137,7 +138,7 @@ class _TeachersHomeScreenState extends State<TeachersHomeScreen> {
                           color: Colors.white,
                         ),
                         const SizedBox(
-                          height: 50,
+                          height: 10,
                         ),
                         TextButton(
                           onPressed: () {
@@ -151,7 +152,7 @@ class _TeachersHomeScreenState extends State<TeachersHomeScreen> {
                                 return AlertDialog(
                                   title: TextBold(
                                       text: 'Edit Profile',
-                                      fontSize: 18,
+                                      fontSize: 12,
                                       color: Colors.black),
                                   content: Column(
                                     mainAxisSize: MainAxisSize.min,
@@ -352,7 +353,7 @@ class _TeachersHomeScreenState extends State<TeachersHomeScreen> {
                     padding: EdgeInsets.only(top: 50),
                     child: Center(
                         child: CircularProgressIndicator(
-                      color: Colors.black,
+                      color: Color.fromARGB(255, 255, 250, 250),
                     )),
                   );
                 }
@@ -567,7 +568,7 @@ class _TeachersHomeScreenState extends State<TeachersHomeScreen> {
                           padding: EdgeInsets.only(top: 50),
                           child: Center(
                               child: CircularProgressIndicator(
-                            color: Colors.black,
+                            color: Color.fromARGB(255, 255, 254, 254),
                           )),
                         );
                       }
@@ -718,7 +719,7 @@ class _TeachersHomeScreenState extends State<TeachersHomeScreen> {
                             child: ListTile(
                               leading: const Icon(Icons.person),
                               title: TextRegular(
-                                text: 'John Doe',
+                                text: ' ',
                                 fontSize: 14,
                                 color: Colors.black,
                               ),
@@ -811,7 +812,7 @@ class _TeachersHomeScreenState extends State<TeachersHomeScreen> {
                           },
                           icon: const Icon(
                             Icons.send,
-                            color: Colors.blue,
+                            color: Color.fromARGB(255, 80, 176, 255),
                           ),
                         ),
                       ),
@@ -857,7 +858,7 @@ class _TeachersHomeScreenState extends State<TeachersHomeScreen> {
                             padding: EdgeInsets.only(top: 50),
                             child: Center(
                                 child: CircularProgressIndicator(
-                              color: Colors.black,
+                              color: Color.fromARGB(255, 255, 250, 250),
                             )),
                           );
                         }

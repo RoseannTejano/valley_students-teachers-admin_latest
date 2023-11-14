@@ -41,7 +41,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
         height: double.infinity,
         width: double.infinity,
         decoration: const BoxDecoration(
-          color: Color.fromARGB(255, 0, 48, 54),
+          color: Color.fromARGB(255, 0, 0, 0),
           image: DecorationImage(
             opacity: 200,
             image: AssetImage(
@@ -77,7 +77,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                     height: double.infinity,
                     width: 400,
                     decoration: const BoxDecoration(
-                      color: Colors.black,
+                      color: Color.fromARGB(143, 0, 0, 0),
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -109,7 +109,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                         TextBold(
                           text: data['idNumber'],
                           fontSize: 18,
-                          color: Colors.white,
+                          color: Color.fromARGB(255, 255, 255, 255),
                         ),
                         const SizedBox(
                           height: 10,
@@ -182,7 +182,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                           ),
                         ),
                         const SizedBox(
-                          height: 50,
+                          height: 10,
                         ),
                         GestureDetector(
                           onTap: () {
@@ -940,7 +940,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                             child: ListTile(
                               leading: const Icon(Icons.person),
                               title: TextRegular(
-                                text: 'John Doe',
+                                text: ' ',
                                 fontSize: 14,
                                 color: Colors.black,
                               ),

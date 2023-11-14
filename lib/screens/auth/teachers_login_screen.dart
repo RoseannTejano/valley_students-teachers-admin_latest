@@ -332,7 +332,7 @@ class _TeachersLoginScreenState extends State<TeachersLoginScreen> {
   bool isValidEmail(String email) {
     // Validate email using a regular expression for CSPC email format.
 
-    if (email.contains('cspc')) {
+    if (email.contains('@my.cspc.edu.ph')) {
       return true;
     } else {
       return false;
@@ -343,7 +343,6 @@ class _TeachersLoginScreenState extends State<TeachersLoginScreen> {
     // Check if password has at least 8 characters and contains a combination of upper, lower, and a number.
     return password.length >= 8 &&
         password.contains(RegExp(r'[A-Z]')) &&
-        password.contains(RegExp(r'[a-z]')) &&
         password.contains(RegExp(r'[0-9]'));
   }
 }
