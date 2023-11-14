@@ -59,16 +59,10 @@ class _TeachersHomeScreenState extends State<TeachersHomeScreen> {
   String myId = '';
 
   String myRole = '';
-
-  final emailController = TextEditingController();
-  final nameController = TextEditingController();
-
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: isSchedule
+      floatingActionButton: isworkLoad
           ? FloatingActionButton(
               onPressed: () {
                 showDialog(
@@ -143,80 +137,9 @@ class _TeachersHomeScreenState extends State<TeachersHomeScreen> {
                           height: 10,
                         ),
                         TextBold(
-                          text: data['idNumber'],
-                          fontSize: 15,
+                          text: data['idNumber'].split('@')[0],
+                          fontSize: 18,
                           color: Colors.white,
-                        ),
-                        const SizedBox(
-                          height: 50,
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            setState(() {
-                              nameController.text = data['name'];
-                              emailController.text = data['idNumber'];
-                            });
-                            showDialog(
-                              context: context,
-                              builder: (context) {
-                                return AlertDialog(
-                                  title: TextBold(
-                                      text: 'Edit Profile',
-                                      fontSize: 18,
-                                      color: Colors.black),
-                                  content: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      TextFieldWidget(
-                                        label: 'Name',
-                                        controller: nameController,
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      TextFieldWidget(
-                                        label: 'Email',
-                                        controller: emailController,
-                                      ),
-                                    ],
-                                  
-                                  ),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: TextBold(
-                                          text: 'Close',
-                                          fontSize: 14,
-                                          color: Colors.black),
-                                    ),
-                                    TextButton(
-                                      onPressed: () async {
-                                        await FirebaseFirestore.instance
-                                            .collection('Users')
-                                            .doc(data.id)
-                                            .update({
-                                          'name': nameController.text,
-                                          'idNumber': emailController.text,
-                                        });
-                                        Navigator.pop(context);
-                                      },
-                                      child: TextBold(
-                                          text: 'Save',
-                                          fontSize: 14,
-                                          color: Colors.black),
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          },
-                          child: TextBold(
-                            text: 'Edit Profile',
-                            fontSize: 12,
-                            color: Colors.white,
-                          ),
                         ),
                         const SizedBox(
                           height: 50,
@@ -289,50 +212,54 @@ class _TeachersHomeScreenState extends State<TeachersHomeScreen> {
                             ],
                           ),
                         ),
-                        // const SizedBox(
-                        //   height: 20,
-                        // ),
-                        // const Padding(
-                        //   padding: EdgeInsets.only(left: 75, right: 75),
-                        //   child: Divider(
-                        //     color: Colors.white,
-                        //   ),
-                        // ),
-                        // const SizedBox(
-                        //   height: 20,
-                        // ),
-                        // GestureDetector(
-                        //   onTap: () {
-                        //     setState(() {
-                        //       isAvailability = false;
-                        //       isSchedule = false;
-                        //       isworkLoad = true;
-                        //     });
-                        //   },
-                        //   child: Row(
-                        //     mainAxisAlignment: MainAxisAlignment.center,
-                        //     children: [
-                        //       Icon(
-                        //         Icons.work,
-                        //         color: isworkLoad ? Colors.white : Colors.grey,
-                        //         size: 48,
-                        //       ),
-                        //       const SizedBox(
-                        //         width: 20,
-                        //       ),
-                        //       TextBold(
-                        //         text: 'Workload',
-                        //         fontSize: 24,
-                        //         color: isworkLoad ? Colors.white : Colors.grey,
-                        //       ),
-                        //     ],
-                        //   ),
-                        // ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.only(left: 75, right: 75),
+                          child: Divider(
+                            color: Colors.white,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              isAvailability = false;
+                              isSchedule = false;
+                              isworkLoad = true;
+                            });
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.work,
+                                color: isworkLoad ? Colors.white : Colors.grey,
+                                size: 48,
+                              ),
+                              const SizedBox(
+                                width: 20,
+                              ),
+                              TextBold(
+                                text: 'Workload',
+                                fontSize: 24,
+                                color: isworkLoad ? Colors.white : Colors.grey,
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   );
                 }),
-            isSchedule ? workload() : availability(),
+            isSchedule
+                ? schedule()
+                : isworkLoad
+                    ? workload()
+                    : availability(),
           ],
         ),
       ),
@@ -848,61 +775,57 @@ class _TeachersHomeScreenState extends State<TeachersHomeScreen> {
   }
 
   Widget workload() {
-    return Padding(
-      padding: const EdgeInsets.only(left: 90),
-      child: Center(
-        child: SizedBox(
-          width: 800,
-          height: 500,
-          child: CellCalendar(
-            events: events,
-            onCellTapped: (date) {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return StreamBuilder<QuerySnapshot>(
-                      stream: FirebaseFirestore.instance
-                          .collection('Events')
-                          .where('year', isEqualTo: date.year)
-                          .where('month', isEqualTo: date.month)
-                          .where('day', isEqualTo: date.day)
-                          .snapshots(),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<QuerySnapshot> snapshot) {
-                        if (snapshot.hasError) {
-                          print('error');
-                          return const Center(child: Text('Error'));
-                        }
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const Padding(
-                            padding: EdgeInsets.only(top: 50),
-                            child: Center(
-                                child: CircularProgressIndicator(
-                              color: Colors.black,
-                            )),
-                          );
-                        }
-
-                        final data = snapshot.requireData;
-                        return EventDialog(
-                          events: [
-                            for (int i = 0; i < data.docs.length; i++)
-                              {
-                                'title': data.docs[i]['name'],
-                                'date': DateFormat.yMMMd()
-                                    .add_jm()
-                                    .format(data.docs[i]['date'].toDate()),
-                                'id': data.docs[i].id,
-                                'details': data.docs[i]['details'],
-                              },
-                          ],
+    return Center(
+      child: SizedBox(
+        width: 500,
+        height: 500,
+        child: CellCalendar(
+          events: events,
+          onCellTapped: (date) {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection('Events')
+                        .where('year', isEqualTo: date.year)
+                        .where('month', isEqualTo: date.month)
+                        .where('day', isEqualTo: date.day)
+                        .snapshots(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<QuerySnapshot> snapshot) {
+                      if (snapshot.hasError) {
+                        print('error');
+                        return const Center(child: Text('Error'));
+                      }
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Padding(
+                          padding: EdgeInsets.only(top: 50),
+                          child: Center(
+                              child: CircularProgressIndicator(
+                            color: Colors.black,
+                          )),
                         );
-                      });
-                },
-              );
-            },
-          ),
+                      }
+
+                      final data = snapshot.requireData;
+                      return EventDialog(
+                        events: [
+                          for (int i = 0; i < data.docs.length; i++)
+                            {
+                              'title': data.docs[i]['name'],
+                              'date': DateFormat.yMMMd()
+                                  .add_jm()
+                                  .format(data.docs[i]['date'].toDate()),
+                              'id': data.docs[i].id,
+                              'details': data.docs[i]['details'],
+                            },
+                        ],
+                      );
+                    });
+              },
+            );
+          },
         ),
       ),
     );
