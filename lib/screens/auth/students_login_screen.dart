@@ -25,7 +25,7 @@ class _StudentsLoginScreenState extends State<StudentsLoginScreen> {
         height: double.infinity,
         width: double.infinity,
         decoration: const BoxDecoration(
-          color: Color.fromARGB(255, 0, 47, 53),
+          color: Color.fromARGB(255, 255, 255, 255),
           image: DecorationImage(
             opacity: 200,
             image: AssetImage(
