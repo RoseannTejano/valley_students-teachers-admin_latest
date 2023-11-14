@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import 'package:valley_students_and_teachers/utils/routes.dart';
 import 'package:valley_students_and_teachers/widgets/button_widget.dart';
 import 'package:valley_students_and_teachers/widgets/reservation_dialog.dart';
@@ -581,6 +582,8 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                                                 'name': data.docs[i]['name'],
                                                 'role': data.docs[i]['role'],
                                                 'userId': data.docs[i].id,
+                                                'email': data.docs[i]
+                                                    ['idNumber']
                                               });
                                               membersId.add(data.docs[i].id);
                                             },
@@ -655,7 +658,19 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                 ),
               ),
               TextButton(
-                onPressed: () {
+                onPressed: () async {
+                  print(members);
+                  //                final Uri emailLaunchUri = Uri(
+                  //   scheme: 'mailto',
+                  //   path: mailPath,
+                  //   queryParameters: {'subject': 'Added to groupchat', 'body': ''},
+                  // );
+                  // if (await canLaunchUrlString(emailLaunchUri.toString())) {
+                  //   await launchUrlString(emailLaunchUri.toString());
+                  // } else {
+                  //   throw 'Could not launch email';
+                  // }
+
                   setState(
                     () {
                       members.add({
@@ -667,6 +682,24 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                   );
                   addChatroom(members, membersId);
                   Navigator.pop(context);
+
+                  for (int i = 0; i < members.length; i++) {
+                    if (members[i]['role'] == 'Teacher') {
+                      final Uri emailLaunchUri = Uri(
+                        scheme: 'mailto',
+                        path: members[i]['email'],
+                        queryParameters: {
+                          'subject': 'Added to consultation',
+                          'body': ''
+                        },
+                      );
+                      if (await canLaunchUrlString(emailLaunchUri.toString())) {
+                        await launchUrlString(emailLaunchUri.toString());
+                      } else {
+                        throw 'Could not launch email';
+                      }
+                    }
+                  }
                   members.clear();
                 },
                 child: TextBold(
