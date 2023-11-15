@@ -109,7 +109,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                         TextBold(
                           text: data['idNumber'],
                           fontSize: 18,
-                          color: Color.fromARGB(255, 255, 255, 255),
+                          color: const Color.fromARGB(255, 255, 255, 255),
                         ),
                         const SizedBox(
                           height: 10,
@@ -533,118 +533,125 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                 controller: searchController,
               ),
             ),
-            content: Column(
-              children: [
-                SizedBox(
-                  height: 180,
-                  width: 300,
-                  child: StreamBuilder<QuerySnapshot>(
-                      stream: FirebaseFirestore.instance
-                          .collection('Users')
-                          .where('name',
-                              isGreaterThanOrEqualTo:
-                                  toBeginningOfSentenceCase(nameSearched))
-                          .where('name',
-                              isLessThan:
-                                  '${toBeginningOfSentenceCase(nameSearched)}z')
-                          .snapshots(),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<QuerySnapshot> snapshot) {
-                        if (snapshot.hasError) {
-                          print(snapshot.error);
-                          return const Center(child: Text('Error'));
-                        }
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const Padding(
-                            padding: EdgeInsets.only(top: 50),
-                            child: Center(
-                                child: CircularProgressIndicator(
-                              color: Colors.black,
-                            )),
-                          );
-                        }
+            content: SingleChildScrollView(
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 180,
+                    width: 300,
+                    child: StreamBuilder<QuerySnapshot>(
+                        stream: FirebaseFirestore.instance
+                            .collection('Users')
+                            .where('name',
+                                isGreaterThanOrEqualTo:
+                                    toBeginningOfSentenceCase(nameSearched))
+                            .where('name',
+                                isLessThan:
+                                    '${toBeginningOfSentenceCase(nameSearched)}z')
+                            .snapshots(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<QuerySnapshot> snapshot) {
+                          if (snapshot.hasError) {
+                            print(snapshot.error);
+                            return const Center(child: Text('Error'));
+                          }
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Padding(
+                              padding: EdgeInsets.only(top: 50),
+                              child: Center(
+                                  child: CircularProgressIndicator(
+                                color: Colors.black,
+                              )),
+                            );
+                          }
 
-                        final data = snapshot.requireData;
-                        return Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            for (int i = 0; i < data.docs.length; i++)
-                              data.docs[i].id !=
-                                      FirebaseAuth.instance.currentUser!.uid
-                                  ? ListTile(
-                                      onTap: () {
-                                        if (membersId
-                                                .contains(data.docs[i].id) ==
-                                            false) {
-                                          setState(
-                                            () {
-                                              members.add({
-                                                'name': data.docs[i]['name'],
-                                                'role': data.docs[i]['role'],
-                                                'userId': data.docs[i].id,
-                                                'email': data.docs[i]
-                                                    ['idNumber']
-                                              });
-                                              membersId.add(data.docs[i].id);
-                                            },
-                                          );
-                                        }
-                                      },
-                                      leading: const Icon(
-                                        Icons.account_circle_outlined,
-                                        size: 32,
-                                      ),
-                                      title: TextBold(
-                                          text: data.docs[i]['name'],
-                                          fontSize: 16,
-                                          color: Colors.black),
-                                      trailing: TextRegular(
-                                          text: data.docs[i]['role'],
-                                          fontSize: 12,
-                                          color: Colors.black),
-                                    )
-                                  : const SizedBox(),
-                          ],
-                        );
-                      }),
-                ),
-                const Divider(),
-                SizedBox(
-                  height: 200,
-                  width: 300,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      for (int i = 0; i < members.length; i++)
-                        ListTile(
-                          leading: const Icon(
-                            Icons.account_circle_outlined,
-                            size: 32,
-                          ),
-                          title: TextBold(
-                              text: members[i]['name'],
-                              fontSize: 16,
-                              color: Colors.black),
-                          subtitle: TextRegular(
-                              text: members[i]['role'],
-                              fontSize: 12,
-                              color: Colors.black),
-                          trailing: IconButton(
-                              onPressed: () {
-                                setState(
-                                  () {
-                                    membersId.removeAt(i);
-                                    members.removeAt(i);
-                                  },
-                                );
-                              },
-                              icon: const Icon(Icons.remove)),
-                        ),
-                    ],
+                          final data = snapshot.requireData;
+                          return SingleChildScrollView(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                for (int i = 0; i < data.docs.length; i++)
+                                  data.docs[i].id !=
+                                          FirebaseAuth.instance.currentUser!.uid
+                                      ? ListTile(
+                                          onTap: () {
+                                            if (membersId.contains(
+                                                    data.docs[i].id) ==
+                                                false) {
+                                              setState(
+                                                () {
+                                                  members.add({
+                                                    'name': data.docs[i]
+                                                        ['name'],
+                                                    'role': data.docs[i]
+                                                        ['role'],
+                                                    'userId': data.docs[i].id,
+                                                    'email': data.docs[i]
+                                                        ['idNumber']
+                                                  });
+                                                  membersId
+                                                      .add(data.docs[i].id);
+                                                },
+                                              );
+                                            }
+                                          },
+                                          leading: const Icon(
+                                            Icons.account_circle_outlined,
+                                            size: 32,
+                                          ),
+                                          title: TextBold(
+                                              text: data.docs[i]['name'],
+                                              fontSize: 16,
+                                              color: Colors.black),
+                                          trailing: TextRegular(
+                                              text: data.docs[i]['role'],
+                                              fontSize: 12,
+                                              color: Colors.black),
+                                        )
+                                      : const SizedBox(),
+                              ],
+                            ),
+                          );
+                        }),
                   ),
-                ),
-              ],
+                  const Divider(),
+                  SizedBox(
+                    height: 200,
+                    width: 300,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        for (int i = 0; i < members.length; i++)
+                          ListTile(
+                            leading: const Icon(
+                              Icons.account_circle_outlined,
+                              size: 32,
+                            ),
+                            title: TextBold(
+                                text: members[i]['name'],
+                                fontSize: 16,
+                                color: Colors.black),
+                            subtitle: TextRegular(
+                                text: members[i]['role'],
+                                fontSize: 12,
+                                color: Colors.black),
+                            trailing: IconButton(
+                                onPressed: () {
+                                  setState(
+                                    () {
+                                      membersId.removeAt(i);
+                                      members.removeAt(i);
+                                    },
+                                  );
+                                },
+                                icon: const Icon(Icons.remove)),
+                          ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
             actions: [
               TextButton(
@@ -727,7 +734,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
               stream: FirebaseFirestore.instance
                   .collection('Notif')
                   .where('userId',
-                      arrayContains: FirebaseAuth.instance.currentUser!.uid)
+                      isEqualTo: FirebaseAuth.instance.currentUser!.uid)
                   .snapshots(),
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
