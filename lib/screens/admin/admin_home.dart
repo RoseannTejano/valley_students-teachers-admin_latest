@@ -11,14 +11,11 @@ import '../../widgets/toast_widget.dart';
 
 class AdminHome extends StatefulWidget {
   const AdminHome({super.key});
-
   @override
   State<AdminHome> createState() => _AdminHomeState();
 }
-
 class _AdminHomeState extends State<AdminHome> {
   final passController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +23,7 @@ class _AdminHomeState extends State<AdminHome> {
         height: double.infinity,
         width: double.infinity,
         decoration: const BoxDecoration(
-          color: Color.fromARGB(255, 0, 0, 0),
+          color: Colors.white,
           image: DecorationImage(
             opacity: 200,
             image: AssetImage(

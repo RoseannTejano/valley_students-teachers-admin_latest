@@ -341,7 +341,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                                   ),
                                   title: TextBold(
                                       text:
-                                          'You have message from ',
+                                          'You have new message ',
                                       fontSize: 16,
                                       color: Colors.black),
                                   subtitle: TextRegular(
@@ -355,9 +355,11 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                       },
                     ));
               }),
+ 
           const SizedBox(
-            height: 20,
+            height: 50,
           ),
+         
           Padding(
             padding: const EdgeInsets.only(left: 50),
             child: Container(
@@ -367,11 +369,19 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(20),
               ),
+              
               child: Column(
                 children: [
                   const SizedBox(
-                    height: 10,
+                    height: 25,
                   ),
+                  
+             TextBold(
+                    text:
+                 'MESSAGES ',
+                fontSize: 18,
+                  color: const Color.fromARGB(255, 0, 0, 0)),
+                  
                   Align(
                     alignment: Alignment.topRight,
                     child: TextButton.icon(
@@ -384,13 +394,13 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                       ),
                       label: TextBold(
                         text: 'Create group',
-                        fontSize: 16,
+                        fontSize: 12,
                         color: Colors.black,
                       ),
                     ),
                   ),
                   const SizedBox(
-                    height: 15,
+                    height: 10,
                   ),
                   StreamBuilder<QuerySnapshot>(
                       stream: FirebaseFirestore.instance
@@ -415,7 +425,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                             )),
                           );
                         }
-
+                     
                         final data = snapshot.requireData;
                         return Expanded(
                           child: SizedBox(
@@ -424,7 +434,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                               itemBuilder: (context, index) {
                                 return Padding(
                                   padding: const EdgeInsets.only(
-                                      top: 20, bottom: 20, left: 30, right: 30),
+                                      top: 5, bottom: 5, left: 20, right: 0),
                                   child: GestureDetector(
                                     onTap: () {
                                       chatroomDialog(data.docs[index].id);
@@ -435,10 +445,10 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                                       children: [
                                         const Icon(
                                           Icons.chat,
-                                          size: 40,
+                                          size: 20,
                                         ),
                                         const SizedBox(
-                                          width: 30,
+                                          width: 20,
                                         ),
                                         TextBold(
                                             text: data.docs[index]['messages']
@@ -448,18 +458,19 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                                                             .length -
                                                         1]['msg']
                                                 : 'No message yet...',
-                                            fontSize: 16,
+                                            fontSize: 12,
                                             color: Colors.black),
                                         const SizedBox(
                                           width: 50,
                                         ),
+
                                         TextRegular(
                                             text: DateFormat.yMMMd()
                                                 .add_jm()
                                                 .format(data.docs[index]
                                                         ['dateTime']
                                                     .toDate()),
-                                            fontSize: 14,
+                                            fontSize: 12,
                                             color: Colors.black),
                                         const SizedBox(
                                           width: 30,
@@ -474,6 +485,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                                           icon: const Icon(
                                             Icons.delete,
                                           ),
+                                        
                                         ),
                                       ],
                                     ),
@@ -510,7 +522,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
         return StatefulBuilder(builder: (context, setState) {
           return AlertDialog(
             title: Container(
-              height: 50,
+              height: 20,
               width: 180,
               decoration: BoxDecoration(
                   border: Border.all(

@@ -390,7 +390,7 @@ class _TeachersHomeScreenState extends State<TeachersHomeScreen> {
                                   ),
                                   title: TextBold(
                                       text:
-                                          'You have been added to a consultation',
+                                          'You have new message consultation',
                                       fontSize: 16,
                                       color: Colors.black),
                                      subtitle: TextRegular(
