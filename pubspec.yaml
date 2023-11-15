@@ -47,6 +47,7 @@ dependencies:
   url_launcher:
   cell_calendar:
   getwidget: ^4.0.0
+  mailer: ^6.0.1
 
 dev_dependencies:
   flutter_test:

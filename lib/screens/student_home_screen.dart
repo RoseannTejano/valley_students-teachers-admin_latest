@@ -341,7 +341,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                                   ),
                                   title: TextBold(
                                       text:
-                                          'You have been added to a consultation',
+                                          'You have message from ',
                                       fontSize: 16,
                                       color: Colors.black),
                                   subtitle: TextRegular(
@@ -349,6 +349,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                                           data.docs[i]['dateTime'].toDate()),
                                       fontSize: 12,
                                       color: Colors.black),
+                                      
                                 ))
                         ];
                       },
@@ -389,7 +390,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                     ),
                   ),
                   const SizedBox(
-                    height: 20,
+                    height: 15,
                   ),
                   StreamBuilder<QuerySnapshot>(
                       stream: FirebaseFirestore.instance
@@ -407,7 +408,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
                           return const Padding(
-                            padding: EdgeInsets.only(top: 50),
+                            padding: EdgeInsets.only(top: 30),
                             child: Center(
                                 child: CircularProgressIndicator(
                               color: Colors.black,
@@ -423,7 +424,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                               itemBuilder: (context, index) {
                                 return Padding(
                                   padding: const EdgeInsets.only(
-                                      top: 10, bottom: 10, left: 20, right: 20),
+                                      top: 20, bottom: 20, left: 30, right: 30),
                                   child: GestureDetector(
                                     onTap: () {
                                       chatroomDialog(data.docs[index].id);
@@ -434,7 +435,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                                       children: [
                                         const Icon(
                                           Icons.chat,
-                                          size: 48,
+                                          size: 40,
                                         ),
                                         const SizedBox(
                                           width: 30,

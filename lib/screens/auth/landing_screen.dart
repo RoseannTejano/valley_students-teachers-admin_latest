@@ -65,7 +65,7 @@ class _LandingScreenState extends State<LandingScreen> {
                           fontColor: Color.fromARGB(255, 0, 0, 0),                  
                           radius: 90,
                           height: 60,
-                          color: Color.fromARGB(255, 255, 255, 255),
+                          color: Color.fromARGB(255, 0, 146, 146),
                           label: 'STUDENT',
                           onPressed: () {
                             Navigator.pushNamed(
@@ -79,7 +79,7 @@ class _LandingScreenState extends State<LandingScreen> {
                           fontColor: Color.fromARGB(255, 0, 0, 0),
                           radius: 90,
                           height: 60,
-                          color: Color.fromARGB(255, 255, 255, 255),
+                          color: Color.fromARGB(255, 0, 146, 146),
                           label: 'FACULTY',
                           onPressed: () {
                             Navigator.pushNamed(
@@ -93,7 +93,7 @@ class _LandingScreenState extends State<LandingScreen> {
                           fontColor: Color.fromARGB(255, 0, 0, 0),
                           radius: 90,
                           height: 60,
-                          color: Color.fromARGB(255, 255, 255, 255),
+                          color: Color.fromARGB(255, 0, 146, 146),
                           label: 'ADMIN',
                           onPressed: () {
                             showDialog(

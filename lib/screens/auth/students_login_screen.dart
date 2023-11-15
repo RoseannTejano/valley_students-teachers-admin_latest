@@ -25,7 +25,7 @@ class _StudentsLoginScreenState extends State<StudentsLoginScreen> {
         height: double.infinity,
         width: double.infinity,
         decoration: const BoxDecoration(
-          color: Color.fromARGB(255, 255, 255, 255),
+          color: Color.fromARGB(255, 0, 0, 0),
           image: DecorationImage(
             opacity: 200,
             image: AssetImage(
@@ -80,11 +80,11 @@ class _StudentsLoginScreenState extends State<StudentsLoginScreen> {
                                         TextEditingController();
 
                                     return AlertDialog(
-                                      backgroundColor: Colors.grey[100],
+                                      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
                                       title: TextRegular(
                                         text: 'Forgot Password',
                                         fontSize: 14,
-                                        color: Colors.black,
+                                        color: Color.fromARGB(255, 255, 255, 255),
                                       ),
                                       content: Form(
                                         key: formKey,
@@ -152,10 +152,10 @@ class _StudentsLoginScreenState extends State<StudentsLoginScreen> {
                                               }
                                             }
                                           }),
-                                          child: TextBold(
+                                          child: TextRegular(
                                             text: 'Continue',
                                             fontSize: 14,
-                                            color: Colors.black,
+                                            color: const Color.fromARGB(255, 255, 255, 255),
                                           ),
                                         ),
                                       ],
@@ -166,7 +166,7 @@ class _StudentsLoginScreenState extends State<StudentsLoginScreen> {
                               child: TextRegular(
                                   text: 'Forgot Password?',
                                   fontSize: 12,
-                                  color: Colors.black),
+                                  color: const Color.fromARGB(255, 255, 255, 255)),
                             ),
                           ),
                         ),
