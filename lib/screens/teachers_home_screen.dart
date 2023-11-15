@@ -10,6 +10,7 @@ import 'package:valley_students_and_teachers/widgets/text_widget.dart';
 import 'package:valley_students_and_teachers/widgets/textfield_widget.dart';
 import 'package:valley_students_and_teachers/widgets/toast_widget.dart';
 
+
 class TeachersHomeScreen extends StatefulWidget {
   const TeachersHomeScreen({super.key});
   @override
@@ -81,6 +82,7 @@ class _TeachersHomeScreenState extends State<TeachersHomeScreen> {
              image: AssetImage(
               'assets/images/back.jpg',
             ),
+            
             fit: BoxFit.cover,
           ),
         ),
@@ -117,10 +119,10 @@ class _TeachersHomeScreenState extends State<TeachersHomeScreen> {
                         const SizedBox(
                           height: 50,
                         ),
-                        Image.asset(
+                    Image.asset(
                           'assets/images/avatar.png',
                           height: 125,
-                        ),
+                    ),
                         const SizedBox(
                           height: 20,
                         ),

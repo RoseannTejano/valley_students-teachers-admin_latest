@@ -46,6 +46,7 @@ dependencies:
   get_storage:
   url_launcher:
   cell_calendar:
+  getwidget: ^4.0.0
 
 dev_dependencies:
   flutter_test:

@@ -23,7 +23,7 @@ class _LandingScreenState extends State<LandingScreen> {
         height: double.infinity,
         width: double.infinity,
         decoration: const BoxDecoration(
-          color: Colors.white,
+          color: Color.fromARGB(255, 0, 0, 0),
           image: DecorationImage(
             opacity: 200,
             image: AssetImage(
@@ -51,14 +51,22 @@ class _LandingScreenState extends State<LandingScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const SizedBox(
-                          height: 250,
+                          height: 200,
+                        ),
+                        TextBold(
+                          text: 'I am',
+                          fontSize: 20,
+                          color: Color.fromARGB(255, 255, 255, 255),
+                        ),
+                        const SizedBox(
+                          height: 30,
                         ),
                         ButtonWidget(
-                          fontColor: Colors.black,
-                          radius: 100,
+                          fontColor: Color.fromARGB(255, 0, 0, 0),                  
+                          radius: 90,
                           height: 60,
-                          color: Colors.white,
-                          label: 'Students',
+                          color: Color.fromARGB(255, 255, 255, 255),
+                          label: 'STUDENT',
                           onPressed: () {
                             Navigator.pushNamed(
                                 context, Routes().studentsloginscreen);
@@ -68,11 +76,11 @@ class _LandingScreenState extends State<LandingScreen> {
                           height: 20,
                         ),
                         ButtonWidget(
-                          fontColor: Colors.black,
-                          radius: 100,
+                          fontColor: Color.fromARGB(255, 0, 0, 0),
+                          radius: 90,
                           height: 60,
-                          color: Colors.white,
-                          label: 'Teachers',
+                          color: Color.fromARGB(255, 255, 255, 255),
+                          label: 'FACULTY',
                           onPressed: () {
                             Navigator.pushNamed(
                                 context, Routes().teachersloginscreen);
@@ -82,11 +90,11 @@ class _LandingScreenState extends State<LandingScreen> {
                           height: 20,
                         ),
                         ButtonWidget(
-                          fontColor: Colors.black,
-                          radius: 100,
+                          fontColor: Color.fromARGB(255, 0, 0, 0),
+                          radius: 90,
                           height: 60,
-                          color: Colors.white,
-                          label: 'Admin',
+                          color: Color.fromARGB(255, 255, 255, 255),
+                          label: 'ADMIN',
                           onPressed: () {
                             showDialog(
                               context: context,

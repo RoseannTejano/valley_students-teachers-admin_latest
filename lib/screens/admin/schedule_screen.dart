@@ -48,7 +48,7 @@ class ScheduleScreen extends StatelessWidget {
                           padding: EdgeInsets.only(top: 50),
                           child: Center(
                               child: CircularProgressIndicator(
-                            color: Colors.black,
+                            color: Color.fromARGB(255, 255, 248, 248),
                           )),
                         );
                       }
