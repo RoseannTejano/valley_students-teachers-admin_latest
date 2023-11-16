@@ -24,7 +24,7 @@ class _AdminHomeState extends State<AdminHome> {
         height: double.infinity,
         width: double.infinity,
         decoration: const BoxDecoration(
-          color: Colors.white,
+          color: Color.fromARGB(255, 0, 0, 0),
           image: DecorationImage(
             opacity: 200,
             image: AssetImage(
@@ -154,7 +154,7 @@ class _AdminHomeState extends State<AdminHome> {
                                 title: TextRegular(
                                     text:
                                         'Title: ${data.docs[index]['description']}',
-                                    fontSize: 14,
+                                    fontSize: 12,
                                     color: Colors.black),
                                 trailing: SizedBox(
                                   width: 150,
@@ -208,7 +208,7 @@ class _AdminHomeState extends State<AdminHome> {
                         },
                         child: TextRegular(
                           text: 'Close',
-                          fontSize: 14,
+                          fontSize: 12,
                           color: Colors.black,
                         ),
                       ),
@@ -230,7 +230,7 @@ class _AdminHomeState extends State<AdminHome> {
                                     child: TextRegular(
                                       color: Colors.black,
                                       text: 'Close',
-                                      fontSize: 14,
+                                      fontSize: 12,
                                     ),
                                   )
                                 ],
