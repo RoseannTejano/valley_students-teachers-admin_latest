@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:valley_students_and_teachers/services/add_announcements.dart';
 
 import '../../services/add_user.dart';
-import '../../utils/routes.dart';
 import '../../widgets/button_widget.dart';
 import '../../widgets/text_widget.dart';
 import '../../widgets/textfield_widget.dart';
@@ -14,6 +14,7 @@ class AdminHome extends StatefulWidget {
   @override
   State<AdminHome> createState() => _AdminHomeState();
 }
+
 class _AdminHomeState extends State<AdminHome> {
   final passController = TextEditingController();
   @override
@@ -92,7 +93,7 @@ class _AdminHomeState extends State<AdminHome> {
                           color: Colors.white,
                           label: 'Special Announcement',
                           onPressed: () {
-                            Navigator.pushNamed(context, Routes().mainhome);
+                            announcementDialog();
                           },
                         ),
                       ],
@@ -104,6 +105,153 @@ class _AdminHomeState extends State<AdminHome> {
           ),
         ),
       ),
+    );
+  }
+
+  announcementDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          child: SizedBox(
+            height: 500,
+            width: 500,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 20),
+                  child: StreamBuilder<QuerySnapshot>(
+                      stream: FirebaseFirestore.instance
+                          .collection('Announcements')
+                          .snapshots(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<QuerySnapshot> snapshot) {
+                        if (snapshot.hasError) {
+                          print(snapshot.error);
+                          return const Center(child: Text('Error'));
+                        }
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Padding(
+                            padding: EdgeInsets.only(top: 50),
+                            child: Center(
+                                child: CircularProgressIndicator(
+                              color: Colors.black,
+                            )),
+                          );
+                        }
+
+                        final data = snapshot.requireData;
+                        return SizedBox(
+                          height: 300,
+                          width: double.infinity,
+                          child: ListView.builder(
+                            itemCount: data.docs.length,
+                            itemBuilder: (context, index) {
+                              return ListTile(
+                                title: TextRegular(
+                                    text:
+                                        'Title: ${data.docs[index]['description']}',
+                                    fontSize: 14,
+                                    color: Colors.black),
+                                trailing: SizedBox(
+                                  width: 150,
+                                  child: Row(
+                                    children: [
+                                      IconButton(
+                                        onPressed: () async {
+                                          await FirebaseFirestore.instance
+                                              .doc(data.docs[index].id)
+                                              .delete();
+                                        },
+                                        icon: const Icon(Icons.delete),
+                                      ),
+                                      data.docs[index]['toshow']
+                                          ? IconButton(
+                                              onPressed: () async {
+                                                await FirebaseFirestore.instance
+                                                    .doc(data.docs[index].id)
+                                                    .update({'toshow': false});
+                                              },
+                                              icon: const Icon(Icons
+                                                  .check_box_outline_blank_outlined),
+                                            )
+                                          : IconButton(
+                                              onPressed: () async {
+                                                await FirebaseFirestore.instance
+                                                    .doc(data.docs[index].id)
+                                                    .update({'toshow': true});
+                                              },
+                                              icon: const Icon(Icons
+                                                  .check_box_outline_blank_outlined),
+                                            )
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      }),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 20, top: 50),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: TextRegular(
+                          text: 'Close',
+                          fontSize: 14,
+                          color: Colors.black,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 50,
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                content: announcements(),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: TextRegular(
+                                      color: Colors.black,
+                                      text: 'Close',
+                                      fontSize: 14,
+                                    ),
+                                  )
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        child: TextRegular(
+                          text: 'Add announcement',
+                          fontSize: 14,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -345,6 +493,37 @@ class _AdminHomeState extends State<AdminHome> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget announcements() {
+    final nameController = TextEditingController();
+    final descController = TextEditingController();
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const SizedBox(
+          height: 20,
+        ),
+        TextFieldWidget(
+            maxLine: 10,
+            height: 200,
+            label: 'Description of Announcement',
+            controller: descController),
+        const SizedBox(
+          height: 20,
+        ),
+        ButtonWidget(
+          color: Colors.blue,
+          label: 'Save',
+          onPressed: () {
+            showToast('Announcement added succesfully!');
+            addAnnouncement(descController.text);
+            // addAnnouncement('', nameController.text, descController.text);
+            Navigator.pop(context);
+          },
+        ),
+      ],
     );
   }
 }
