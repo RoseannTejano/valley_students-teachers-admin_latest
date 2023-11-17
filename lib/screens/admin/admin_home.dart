@@ -113,143 +113,156 @@ class _AdminHomeState extends State<AdminHome> {
       context: context,
       builder: (context) {
         return Dialog(
-          child: SizedBox(
-            height: 500,
-            width: 500,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 20),
-                  child: StreamBuilder<QuerySnapshot>(
-                      stream: FirebaseFirestore.instance
-                          .collection('Announcements')
-                          .snapshots(),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<QuerySnapshot> snapshot) {
-                        if (snapshot.hasError) {
-                          print(snapshot.error);
-                          return const Center(child: Text('Error'));
-                        }
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const Padding(
-                            padding: EdgeInsets.only(top: 50),
-                            child: Center(
-                                child: CircularProgressIndicator(
-                              color: Colors.black,
-                            )),
-                          );
-                        }
+          child: StatefulBuilder(builder: (context, setState) {
+            return SizedBox(
+              height: 500,
+              width: 500,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20),
+                    child: StreamBuilder<QuerySnapshot>(
+                        stream: FirebaseFirestore.instance
+                            .collection('Announcements')
+                            .snapshots(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<QuerySnapshot> snapshot) {
+                          if (snapshot.hasError) {
+                            print(snapshot.error);
+                            return const Center(child: Text('Error'));
+                          }
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Padding(
+                              padding: EdgeInsets.only(top: 50),
+                              child: Center(
+                                  child: CircularProgressIndicator(
+                                color: Colors.black,
+                              )),
+                            );
+                          }
 
-                        final data = snapshot.requireData;
-                        return SizedBox(
-                          height: 300,
-                          width: double.infinity,
-                          child: ListView.builder(
-                            itemCount: data.docs.length,
-                            itemBuilder: (context, index) {
-                              return ListTile(
-                                title: TextRegular(
-                                    text:
-                                        'Title: ${data.docs[index]['description']}',
-                                    fontSize: 12,
-                                    color: Colors.black),
-                                trailing: SizedBox(
-                                  width: 150,
-                                  child: Row(
-                                    children: [
-                                      IconButton(
-                                        onPressed: () async {
-                                          await FirebaseFirestore.instance
-                                              .doc(data.docs[index].id)
-                                              .delete();
-                                        },
-                                        icon: const Icon(Icons.delete),
-                                      ),
-                                      data.docs[index]['toshow']
-                                          ? IconButton(
-                                              onPressed: () async {
-                                                await FirebaseFirestore.instance
-                                                    .doc(data.docs[index].id)
-                                                    .update({'toshow': false});
-                                              },
-                                              icon: const Icon(Icons
-                                                  .check_box_outline_blank_outlined),
-                                            )
-                                          : IconButton(
-                                              onPressed: () async {
-                                                await FirebaseFirestore.instance
-                                                    .doc(data.docs[index].id)
-                                                    .update({'toshow': true});
-                                              },
-                                              icon: const Icon(Icons
-                                                  .check_box_outline_blank_outlined),
-                                            )
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        );
-                      }),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 20, top: 50),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: TextRegular(
-                          text: 'Close',
-                          fontSize: 12,
-                          color: Colors.black,
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 50,
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                content: announcements(),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: TextRegular(
-                                      color: Colors.black,
-                                      text: 'Close',
+                          final data = snapshot.requireData;
+                          return SizedBox(
+                            height: 300,
+                            width: double.infinity,
+                            child: ListView.builder(
+                              itemCount: data.docs.length,
+                              itemBuilder: (context, index) {
+                                return ListTile(
+                                  title: TextRegular(
+                                      text:
+                                          'Title: ${data.docs[index]['description']}',
                                       fontSize: 12,
+                                      color: Colors.black),
+                                  trailing: SizedBox(
+                                    width: 150,
+                                    child: Row(
+                                      children: [
+                                        IconButton(
+                                          onPressed: () async {
+                                            await FirebaseFirestore.instance
+                                                .collection('Announcements')
+                                                .doc(data.docs[index].id)
+                                                .delete();
+                                          },
+                                          icon: const Icon(Icons.delete),
+                                        ),
+                                        data.docs[index]['toshow']
+                                            ? IconButton(
+                                                onPressed: () async {
+                                                  await FirebaseFirestore
+                                                      .instance
+                                                      .collection(
+                                                          'Announcements')
+                                                      .doc(data.docs[index].id)
+                                                      .update(
+                                                          {'toshow': false});
+
+                                                  setState(() {});
+                                                },
+                                                icon:
+                                                    const Icon(Icons.check_box),
+                                              )
+                                            : IconButton(
+                                                onPressed: () async {
+                                                  await FirebaseFirestore
+                                                      .instance
+                                                      .collection(
+                                                          'Announcements')
+                                                      .doc(data.docs[index].id)
+                                                      .update({'toshow': true});
+                                                  setState(() {});
+                                                },
+                                                icon: const Icon(Icons
+                                                    .check_box_outline_blank_outlined),
+                                              )
+                                      ],
                                     ),
-                                  )
-                                ],
-                              );
-                            },
+                                  ),
+                                );
+                              },
+                            ),
                           );
-                        },
-                        child: TextRegular(
-                          text: 'Add announcement',
-                          fontSize: 14,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ],
+                        }),
                   ),
-                ),
-              ],
-            ),
-          ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 20, top: 50),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: TextRegular(
+                            text: 'Close',
+                            fontSize: 12,
+                            color: Colors.black,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 50,
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  content: announcements(),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: TextRegular(
+                                        color: Colors.black,
+                                        text: 'Close',
+                                        fontSize: 12,
+                                      ),
+                                    )
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                          child: TextRegular(
+                            text: 'Add announcement',
+                            fontSize: 14,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }),
         );
       },
     );
