@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import 'package:valley_students_and_teachers/services/add_notif.dart';
 import 'package:valley_students_and_teachers/utils/routes.dart';
 import 'package:valley_students_and_teachers/widgets/button_widget.dart';
 import 'package:valley_students_and_teachers/widgets/reservation_dialog.dart';
@@ -340,8 +341,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                                     color: Colors.black,
                                   ),
                                   title: TextBold(
-                                      text:
-                                          'You have new message ',
+                                      text: 'You have new message ',
                                       fontSize: 16,
                                       color: Colors.black),
                                   subtitle: TextRegular(
@@ -349,17 +349,14 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                                           data.docs[i]['dateTime'].toDate()),
                                       fontSize: 12,
                                       color: Colors.black),
-                                      
                                 ))
                         ];
                       },
                     ));
               }),
- 
           const SizedBox(
             height: 50,
           ),
-         
           Padding(
             padding: const EdgeInsets.only(left: 50),
             child: Container(
@@ -369,19 +366,15 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(20),
               ),
-              
               child: Column(
                 children: [
                   const SizedBox(
                     height: 25,
                   ),
-                  
-             TextBold(
-                    text:
-                 'MESSAGES ',
-                fontSize: 18,
-                  color: const Color.fromARGB(255, 0, 0, 0)),
-                  
+                  TextBold(
+                      text: 'MESSAGES ',
+                      fontSize: 18,
+                      color: const Color.fromARGB(255, 0, 0, 0)),
                   Align(
                     alignment: Alignment.topRight,
                     child: TextButton.icon(
@@ -425,7 +418,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                             )),
                           );
                         }
-                     
+
                         final data = snapshot.requireData;
                         return Expanded(
                           child: SizedBox(
@@ -463,7 +456,6 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                                         const SizedBox(
                                           width: 50,
                                         ),
-
                                         TextRegular(
                                             text: DateFormat.yMMMd()
                                                 .add_jm()
@@ -485,7 +477,6 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                                           icon: const Icon(
                                             Icons.delete,
                                           ),
-                                        
                                         ),
                                       ],
                                     ),
@@ -705,6 +696,10 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
 
                   for (int i = 0; i < members.length; i++) {
                     if (members[i]['role'] == 'Teacher') {
+                      addNotif(
+                          members[i]['name'],
+                          'You have been added to a consultation',
+                          members[i]['userId']);
                       final Uri emailLaunchUri = Uri(
                         scheme: 'mailto',
                         path: members[i]['email'],
