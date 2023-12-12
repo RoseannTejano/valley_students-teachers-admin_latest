@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:valley_students_and_teachers/services/add_announcements.dart';
+import 'package:valley_students_and_teachers/utils/media_query.dart';
 
 import '../../services/add_user.dart';
 import '../../widgets/button_widget.dart';
@@ -383,16 +384,16 @@ class _AdminHomeState extends State<AdminHome> {
   Widget reservation() {
     return Dialog(
       child: SizedBox(
-        width: 500,
+        width: deviceSize.width,
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             const SizedBox(
               height: 20,
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 50),
+              padding: const EdgeInsets.only(left: 5),
               child: Container(
                 height: 300,
                 width: double.infinity,
@@ -435,36 +436,37 @@ class _AdminHomeState extends State<AdminHome> {
                                 itemBuilder: (context, index) {
                                   return Padding(
                                     padding: const EdgeInsets.only(
-                                        top: 10,
-                                        bottom: 10,
-                                        left: 20,
-                                        right: 20),
+                                      top: 10,
+                                      bottom: 10,
+                                    ),
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
                                       children: [
                                         const Icon(
                                           Icons.calendar_month_outlined,
-                                          size: 48,
+                                          size: 30,
                                         ),
                                         const SizedBox(
-                                          width: 30,
+                                          width: 15,
                                         ),
                                         TextBold(
                                             text: data.docs[index]['name'],
                                             fontSize: 16,
                                             color: Colors.black),
                                         const SizedBox(
-                                          width: 50,
+                                          width: 20,
                                         ),
                                         TextRegular(
-                                            text: data.docs[index]['date'] +
-                                                ' ' +
-                                                data.docs[index]['time'],
+                                            text:
+                                                '${data.docs[index]['date']} \n${data.docs[index]['time']}',
+                                            // data.docs[index]['date'] +
+                                            //     ' ' +
+                                            //     data.docs[index]['time'],
                                             fontSize: 14,
                                             color: Colors.black),
                                         const SizedBox(
-                                          width: 30,
+                                          width: 10,
                                         ),
                                         IconButton(
                                           onPressed: () async {
@@ -480,17 +482,14 @@ class _AdminHomeState extends State<AdminHome> {
                                         const SizedBox(
                                           width: 10,
                                         ),
-                                        IconButton(
-                                          onPressed: () async {
-                                            await FirebaseFirestore.instance
-                                                .collection('Reservations')
-                                                .doc(data.docs[index].id)
-                                                .delete();
-                                          },
-                                          icon: const Icon(
-                                            Icons.delete,
-                                          ),
-                                        ),
+                                        TextButton(
+                                            onPressed: () async {
+                                              await FirebaseFirestore.instance
+                                                  .collection('Reservations')
+                                                  .doc(data.docs[index].id)
+                                                  .delete();
+                                            },
+                                            child: Text('Decline'))
                                       ],
                                     ),
                                   );

@@ -25,7 +25,7 @@ class _LandingScreenState extends State<LandingScreen> {
         decoration: const BoxDecoration(
           color: Color.fromARGB(255, 0, 0, 0),
           image: DecorationImage(
-            opacity: 200,
+            opacity: 0.9,
             image: AssetImage(
               'assets/images/back.jpg',
             ),
@@ -53,18 +53,12 @@ class _LandingScreenState extends State<LandingScreen> {
                         const SizedBox(
                           height: 200,
                         ),
-                        TextBold(
-                          text: 'I am',
-                          fontSize: 20,
-                          color: Color.fromARGB(255, 255, 255, 255),
-                        ),
                         const SizedBox(
                           height: 30,
                         ),
                         ButtonWidget(
-                          fontColor: Color.fromARGB(255, 0, 0, 0),                  
+                          fontColor: Color.fromARGB(255, 0, 0, 0),
                           radius: 90,
-                          height: 60,
                           color: Color.fromARGB(255, 255, 255, 255),
                           label: 'STUDENT',
                           onPressed: () {
@@ -73,12 +67,11 @@ class _LandingScreenState extends State<LandingScreen> {
                           },
                         ),
                         const SizedBox(
-                          height: 20,
+                          height: 10,
                         ),
                         ButtonWidget(
                           fontColor: Color.fromARGB(255, 0, 0, 0),
                           radius: 90,
-                          height: 60,
                           color: Color.fromARGB(255, 255, 255, 255),
                           label: 'FACULTY',
                           onPressed: () {
@@ -87,12 +80,11 @@ class _LandingScreenState extends State<LandingScreen> {
                           },
                         ),
                         const SizedBox(
-                          height: 20,
+                          height: 10,
                         ),
                         ButtonWidget(
                           fontColor: Color.fromARGB(255, 0, 0, 0),
                           radius: 90,
-                          height: 60,
                           color: Color.fromARGB(255, 255, 255, 255),
                           label: 'ADMIN',
                           onPressed: () {

@@ -36,18 +36,22 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        TextRegular(text: widget.label, fontSize: 12, color: Colors.black),
+        TextBold(
+          text: widget.label,
+          fontSize: 15,
+          color: Colors.white,
+        ),
         const SizedBox(
           height: 5,
         ),
         Container(
           height: widget.height,
           width: widget.width,
-          decoration: BoxDecoration(
-              border: Border.all(
-                color: const Color.fromARGB(255, 0, 0, 0),
-              ),
-              borderRadius: BorderRadius.circular(5)),
+          // decoration: BoxDecoration(
+          //     border: Border.all(
+          //       color: const Color.fromARGB(255, 0, 0, 0),
+          //     ),
+          //     borderRadius: BorderRadius.circular(5)),
           child: Padding(
             padding: const EdgeInsets.only(left: 10, right: 10),
             child: TextFormField(
@@ -56,6 +60,8 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
                   : TextCapitalization.words,
               keyboardType: widget.inputType,
               decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.white,
                 suffixIcon: widget.isPassword!
                     ? IconButton(
                         onPressed: () {

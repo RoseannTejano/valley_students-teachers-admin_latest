@@ -23,7 +23,7 @@ class FacultyScreen extends StatelessWidget {
         decoration: const BoxDecoration(
           color: Colors.blue,
           image: DecorationImage(
-            opacity: 110,
+            opacity: 0.9,
             image: AssetImage(
               'assets/images/back.jpg',
             ),

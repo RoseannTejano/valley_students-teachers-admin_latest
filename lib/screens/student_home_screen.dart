@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:valley_students_and_teachers/services/add_notif.dart';
+import 'package:valley_students_and_teachers/utils/media_query.dart';
 import 'package:valley_students_and_teachers/utils/routes.dart';
 import 'package:valley_students_and_teachers/widgets/button_widget.dart';
 import 'package:valley_students_and_teachers/widgets/reservation_dialog.dart';
@@ -38,330 +39,350 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        height: double.infinity,
-        width: double.infinity,
-        decoration: const BoxDecoration(
-          color: Color.fromARGB(255, 0, 0, 0),
-          image: DecorationImage(
-            opacity: 200,
-            image: AssetImage(
-              'assets/images/back.jpg',
+      body: SingleChildScrollView(
+        child: Container(
+          height: deviceSize.height,
+          width: double.infinity,
+          decoration: const BoxDecoration(
+            color: Color.fromARGB(255, 0, 0, 0),
+            image: DecorationImage(
+              opacity: 200,
+              image: AssetImage(
+                'assets/images/back.jpg',
+              ),
+              fit: BoxFit.cover,
             ),
-            fit: BoxFit.cover,
           ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            StreamBuilder<DocumentSnapshot>(
-                stream: userData,
-                builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-                  if (!snapshot.hasData) {
-                    return const SizedBox();
-                  } else if (snapshot.hasError) {
-                    return const SizedBox();
-                  } else if (snapshot.connectionState ==
-                      ConnectionState.waiting) {
-                    return const SizedBox();
-                  }
-                  dynamic data = snapshot.data;
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              StreamBuilder<DocumentSnapshot>(
+                  stream: userData,
+                  builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                    if (!snapshot.hasData) {
+                      return const SizedBox();
+                    } else if (snapshot.hasError) {
+                      return const SizedBox();
+                    } else if (snapshot.connectionState ==
+                        ConnectionState.waiting) {
+                      return const SizedBox();
+                    }
+                    dynamic data = snapshot.data;
 
-                  WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-                    myName = data['name'];
+                    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                      myName = data['name'];
 
-                    myRole = data['role'];
-                    myId = data.id;
-                    membersId.add(data.id);
-                  });
-                  return Container(
-                    height: double.infinity,
-                    width: 400,
-                    decoration: const BoxDecoration(
-                      color: Color.fromARGB(143, 0, 0, 0),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        TextBold(
-                          text: 'Welcome!',
-                          fontSize: 32,
-                          color: Colors.white,
-                        ),
-                        const SizedBox(
-                          height: 50,
-                        ),
-                        Image.asset(
-                          'assets/images/avatar.png',
-                          height: 125,
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        TextBold(
-                          text: data['name'],
-                          fontSize: 24,
-                          color: Colors.white,
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        TextBold(
-                          text: data['idNumber'],
-                          fontSize: 18,
-                          color: const Color.fromARGB(255, 255, 255, 255),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            setState(() {
-                              nameController.text = data['name'];
-                              emailController.text = data['idNumber'];
-                            });
-                            showDialog(
-                              context: context,
-                              builder: (context) {
-                                return AlertDialog(
-                                  title: TextBold(
-                                      text: 'Edit Profile',
-                                      fontSize: 18,
-                                      color: Colors.black),
-                                  content: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      TextFieldWidget(
-                                        label: 'Name',
-                                        controller: nameController,
+                      myRole = data['role'];
+                      myId = data.id;
+                      membersId.add(data.id);
+                    });
+                    return Container(
+                      height: double.infinity,
+                      width: deviceSize.width,
+                      decoration: const BoxDecoration(
+                        color: Color.fromARGB(143, 0, 0, 0),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          TextBold(
+                            text: 'Welcome!',
+                            fontSize: 32,
+                            color: Colors.white,
+                          ),
+                          const SizedBox(
+                            height: 50,
+                          ),
+                          Image.asset(
+                            'assets/images/avatar.png',
+                            height: 125,
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          TextBold(
+                            text: data['name'],
+                            fontSize: 24,
+                            color: Colors.white,
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          TextBold(
+                            text: data['idNumber'],
+                            fontSize: 18,
+                            color: const Color.fromARGB(255, 255, 255, 255),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              setState(() {
+                                nameController.text = data['name'];
+                                emailController.text = data['idNumber'];
+                              });
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: TextBold(
+                                        text: 'Edit Profile',
+                                        fontSize: 18,
+                                        color: Colors.black),
+                                    content: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        TextFieldWidget(
+                                          label: 'Name',
+                                          controller: nameController,
+                                        ),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        TextFieldWidget(
+                                          label: 'Email',
+                                          controller: emailController,
+                                        ),
+                                      ],
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: TextBold(
+                                            text: 'Close',
+                                            fontSize: 14,
+                                            color: Colors.black),
                                       ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      TextFieldWidget(
-                                        label: 'Email',
-                                        controller: emailController,
+                                      TextButton(
+                                        onPressed: () async {
+                                          await FirebaseFirestore.instance
+                                              .collection('Users')
+                                              .doc(data.id)
+                                              .update({
+                                            'name': nameController.text,
+                                            'idNumber': emailController.text,
+                                          });
+                                          Navigator.pop(context);
+                                        },
+                                        child: TextBold(
+                                            text: 'Save',
+                                            fontSize: 14,
+                                            color: Colors.black),
                                       ),
                                     ],
-                                  ),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: TextBold(
-                                          text: 'Close',
-                                          fontSize: 14,
-                                          color: Colors.black),
-                                    ),
-                                    TextButton(
-                                      onPressed: () async {
-                                        await FirebaseFirestore.instance
-                                            .collection('Users')
-                                            .doc(data.id)
-                                            .update({
-                                          'name': nameController.text,
-                                          'idNumber': emailController.text,
-                                        });
-                                        Navigator.pop(context);
-                                      },
-                                      child: TextBold(
-                                          text: 'Save',
-                                          fontSize: 14,
-                                          color: Colors.black),
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          },
-                          child: TextBold(
-                            text: 'Edit Profile',
-                            fontSize: 12,
-                            color: Colors.white,
+                                  );
+                                },
+                              );
+                            },
+                            child: TextBold(
+                              text: 'Edit Profile',
+                              fontSize: 12,
+                              color: Colors.white,
+                            ),
                           ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              isAvailability = false;
-                              isSchedule = true;
-                            });
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.email_outlined,
-                                color: isSchedule ? Colors.white : Colors.grey,
-                                size: 48,
-                              ),
-                              const SizedBox(
-                                width: 20,
-                              ),
-                              TextBold(
-                                text: 'Consultation',
-                                fontSize: 24,
-                                color: isSchedule ? Colors.white : Colors.grey,
-                              ),
-                            ],
+                          const SizedBox(
+                            height: 10,
                           ),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.only(left: 75, right: 75),
-                          child: Divider(
-                            color: Colors.white,
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                isAvailability = false;
+                                isSchedule = true;
+                              });
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return consultation();
+                                  });
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.email_outlined,
+                                  color:
+                                      isSchedule ? Colors.white : Colors.grey,
+                                  size: 48,
+                                ),
+                                const SizedBox(
+                                  width: 20,
+                                ),
+                                TextBold(
+                                  text: 'Consultation',
+                                  fontSize: 24,
+                                  color:
+                                      isSchedule ? Colors.white : Colors.grey,
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              isAvailability = true;
-                              isSchedule = false;
-                            });
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.calendar_month_outlined,
-                                color:
-                                    isAvailability ? Colors.white : Colors.grey,
-                                size: 48,
-                              ),
-                              const SizedBox(
-                                width: 20,
-                              ),
-                              TextBold(
-                                text: 'Reservation',
-                                fontSize: 24,
-                                color:
-                                    isAvailability ? Colors.white : Colors.grey,
-                              ),
-                            ],
+                          const SizedBox(
+                            height: 20,
                           ),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.only(left: 75, right: 75),
-                          child: Divider(
-                            color: Colors.white,
+                          const Padding(
+                            padding: EdgeInsets.only(left: 75, right: 75),
+                            child: Divider(
+                              color: Colors.white,
+                            ),
                           ),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        ButtonWidget(
-                          label: 'View Faculty Workload',
-                          onPressed: () {
-                            Navigator.pushNamed(context, Routes().teacherlist);
-                          },
-                        ),
-                      ],
-                    ),
-                  );
-                }),
-            isSchedule ? consultation() : reservation(),
-          ],
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                isAvailability = true;
+                                isSchedule = false;
+                              });
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return reservation();
+                                  });
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.calendar_month_outlined,
+                                  color: isAvailability
+                                      ? Colors.white
+                                      : Colors.grey,
+                                  size: 48,
+                                ),
+                                const SizedBox(
+                                  width: 20,
+                                ),
+                                TextBold(
+                                  text: 'Reservation',
+                                  fontSize: 24,
+                                  color: isAvailability
+                                      ? Colors.white
+                                      : Colors.grey,
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.only(left: 75, right: 75),
+                            child: Divider(
+                              color: Colors.white,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          ButtonWidget(
+                            label: 'View Faculty Workload',
+                            onPressed: () {
+                              Navigator.pushNamed(
+                                  context, Routes().teacherlist);
+                            },
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
+              // isSchedule ? consultation() : reservation(),
+            ],
+          ),
         ),
       ),
     );
   }
 
   Widget consultation() {
-    return SizedBox(
-      width: 800,
-      height: double.infinity,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance
-                  .collection('Chats')
-                  .where('membersId',
-                      arrayContains: FirebaseAuth.instance.currentUser!.uid)
-                  .where('creator',
-                      isNotEqualTo: FirebaseAuth.instance.currentUser!.uid)
-                  .snapshots(),
-              builder: (BuildContext context,
-                  AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (snapshot.hasError) {
-                  print(snapshot.error);
-                  return const Center(child: Text('Error'));
-                }
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Padding(
-                    padding: EdgeInsets.only(top: 50),
-                    child: Center(
-                        child: CircularProgressIndicator(
-                      color: Colors.black,
-                    )),
-                  );
-                }
+    return AlertDialog(
+      title: Container(
+        width: deviceSize.width,
+        color: Colors.transparent,
+        height: deviceSize.height * .6,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('Chats')
+                    .where('membersId',
+                        arrayContains: FirebaseAuth.instance.currentUser!.uid)
+                    .where('creator',
+                        isNotEqualTo: FirebaseAuth.instance.currentUser!.uid)
+                    .snapshots(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (snapshot.hasError) {
+                    print(snapshot.error);
+                    return const Center(child: Text('Error'));
+                  }
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Padding(
+                      padding: EdgeInsets.only(top: 50),
+                      child: Center(
+                          child: CircularProgressIndicator(
+                        color: Colors.black,
+                      )),
+                    );
+                  }
 
-                final data = snapshot.requireData;
-                return Align(
-                    alignment: Alignment.topRight,
-                    child: PopupMenuButton(
-                      icon: Badge(
-                        backgroundColor: Colors.red,
-                        label: TextRegular(
-                            text: data.docs.length.toString(),
-                            fontSize: 14,
-                            color: Colors.white),
-                        child: const Icon(
-                          Icons.notifications,
-                          color: Colors.black,
-                          size: 32,
+                  final data = snapshot.requireData;
+                  return Align(
+                      alignment: Alignment.topRight,
+                      child: PopupMenuButton(
+                        icon: Badge(
+                          backgroundColor: Colors.red,
+                          label: TextRegular(
+                              text: data.docs.length.toString(),
+                              fontSize: 14,
+                              color: Colors.white),
+                          child: const Icon(
+                            Icons.notifications,
+                            color: Colors.grey,
+                            size: 32,
+                          ),
                         ),
-                      ),
-                      itemBuilder: (context) {
-                        return [
-                          for (int i = 0; i < data.docs.length; i++)
-                            PopupMenuItem(
-                                onTap: () {
-                                  chatroomDialog(data.docs[i].id);
-                                  chatroomDialog(data.docs[i].id);
-                                },
-                                child: ListTile(
-                                  leading: const Icon(
-                                    Icons.notifications,
-                                    color: Colors.black,
-                                  ),
-                                  title: TextBold(
-                                      text: 'You have new message ',
-                                      fontSize: 16,
-                                      color: Colors.black),
-                                  subtitle: TextRegular(
-                                      text: DateFormat.yMMMd().add_jm().format(
-                                          data.docs[i]['dateTime'].toDate()),
-                                      fontSize: 12,
-                                      color: Colors.black),
-                                ))
-                        ];
-                      },
-                    ));
-              }),
-          const SizedBox(
-            height: 50,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 50),
-            child: Container(
-              height: 300,
-              width: double.infinity,
+                        itemBuilder: (context) {
+                          return [
+                            for (int i = 0; i < data.docs.length; i++)
+                              PopupMenuItem(
+                                  onTap: () {
+                                    chatroomDialog(data.docs[i].id);
+                                    chatroomDialog(data.docs[i].id);
+                                  },
+                                  child: ListTile(
+                                    leading: const Icon(
+                                      Icons.notifications,
+                                      color: Colors.black,
+                                    ),
+                                    title: TextBold(
+                                        text: 'You have new message ',
+                                        fontSize: 16,
+                                        color: Colors.black),
+                                    subtitle: TextRegular(
+                                        text: DateFormat.yMMMd()
+                                            .add_jm()
+                                            .format(data.docs[i]['dateTime']
+                                                .toDate()),
+                                        fontSize: 12,
+                                        color: Colors.black),
+                                  ))
+                          ];
+                        },
+                      ));
+                }),
+            const SizedBox(
+              height: 10,
+            ),
+            Container(
+              height: deviceSize.height * .52,
+              width: deviceSize.width,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(20),
@@ -420,14 +441,19 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                         }
 
                         final data = snapshot.requireData;
+
                         return Expanded(
                           child: SizedBox(
                             child: ListView.builder(
                               itemCount: data.docs.length,
                               itemBuilder: (context, index) {
+                                String date = DateFormat.yMMMd()
+                                    .add_jm()
+                                    .format(
+                                        data.docs[index]['dateTime'].toDate());
                                 return Padding(
                                   padding: const EdgeInsets.only(
-                                      top: 5, bottom: 5, left: 20, right: 0),
+                                      top: 5, bottom: 5, left: 0, right: 0),
                                   child: GestureDetector(
                                     onTap: () {
                                       chatroomDialog(data.docs[index].id);
@@ -441,7 +467,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                                           size: 20,
                                         ),
                                         const SizedBox(
-                                          width: 20,
+                                          width: 5,
                                         ),
                                         TextBold(
                                             text: data.docs[index]['messages']
@@ -451,22 +477,24 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                                                             .length -
                                                         1]['msg']
                                                 : 'No message yet...',
-                                            fontSize: 12,
+                                            fontSize: 11,
                                             color: Colors.black),
                                         const SizedBox(
-                                          width: 50,
+                                          width: 20,
                                         ),
                                         TextRegular(
-                                            text: DateFormat.yMMMd()
-                                                .add_jm()
-                                                .format(data.docs[index]
-                                                        ['dateTime']
-                                                    .toDate()),
+                                            text:
+                                                '${date.substring(0, 12)} \n${date.substring(12)}',
+                                            // DateFormat.yMMMd()
+                                            //     .add_jm()
+                                            //     .format(data.docs[index]
+                                            //             ['dateTime']
+                                            //         .toDate()),
                                             fontSize: 12,
                                             color: Colors.black),
-                                        const SizedBox(
-                                          width: 30,
-                                        ),
+                                        // const SizedBox(
+                                        //   width: 5,
+                                        // ),
                                         IconButton(
                                           onPressed: () async {
                                             await FirebaseFirestore.instance
@@ -493,8 +521,8 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                 ],
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -513,26 +541,29 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
         return StatefulBuilder(builder: (context, setState) {
           return AlertDialog(
             title: Container(
-              height: 20,
+              height: 35,
               width: 180,
-              decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.black,
-                  ),
-                  borderRadius: BorderRadius.circular(5)),
               child: TextFormField(
                 onChanged: (value) {
                   setState(() {
                     nameSearched = value;
                   });
                 },
-                decoration: const InputDecoration(
-                    hintText: 'Search member',
-                    hintStyle: TextStyle(fontFamily: 'QRegular'),
-                    prefixIcon: Icon(
-                      Icons.search,
-                      color: Colors.grey,
-                    )),
+                decoration: InputDecoration(
+                  hintText: 'Search member',
+                  hintStyle: TextStyle(fontFamily: 'QRegular'),
+                  prefixIcon: Icon(
+                    Icons.search,
+                    color: Colors.grey,
+                  ),
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    borderSide: BorderSide(width: 0.5, color: Colors.black54),
+                  ),
+                  contentPadding: EdgeInsets.only(top: 5),
+                ),
                 controller: searchController,
               ),
             ),
@@ -731,197 +762,206 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
   }
 
   Widget reservation() {
-    return SizedBox(
-      width: 800,
-      height: double.infinity,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance
-                  .collection('Notif')
-                  .where('userId',
-                      isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-                  .snapshots(),
-              builder: (BuildContext context,
-                  AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (snapshot.hasError) {
-                  print(snapshot.error);
-                  return const Center(child: Text('Error'));
-                }
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Padding(
-                    padding: EdgeInsets.only(top: 50),
-                    child: Center(
-                        child: CircularProgressIndicator(
-                      color: Colors.black,
-                    )),
-                  );
-                }
-
-                final data = snapshot.requireData;
-                return Align(
-                    alignment: Alignment.topRight,
-                    child: PopupMenuButton(
-                      icon: Badge(
-                        backgroundColor: Colors.red,
-                        label: TextRegular(
-                            text: data.docs.length.toString(),
-                            fontSize: 14,
-                            color: Colors.white),
-                        child: const Icon(
-                          Icons.notifications,
+    return AlertDialog(
+      title: SingleChildScrollView(
+        child: Container(
+          width: deviceSize.width,
+          color: Colors.transparent,
+          height: deviceSize.height * .5 - 5,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('Notif')
+                      .where('userId',
+                          isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+                      .snapshots(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (snapshot.hasError) {
+                      print(snapshot.error);
+                      return const Center(child: Text('Error'));
+                    }
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Padding(
+                        padding: EdgeInsets.only(top: 50),
+                        child: Center(
+                            child: CircularProgressIndicator(
                           color: Colors.black,
-                          size: 32,
-                        ),
-                      ),
-                      itemBuilder: (context) {
-                        return [
-                          for (int i = 0; i < data.docs.length; i++)
-                            PopupMenuItem(
-                                child: ListTile(
-                              leading: const Icon(
-                                Icons.notifications,
-                                color: Colors.black,
-                              ),
-                              title: TextBold(
-                                  text: data.docs[i]['name'],
-                                  fontSize: 16,
-                                  color: Colors.black),
-                              subtitle: TextRegular(
-                                  text: DateFormat.yMMMd().add_jm().format(
-                                      data.docs[i]['dateTime'].toDate()),
-                                  fontSize: 12,
-                                  color: Colors.black),
-                            ))
-                        ];
-                      },
-                    ));
-              }),
-          const SizedBox(
-            height: 20,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 50),
-            child: Container(
-              height: 300,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Column(
-                children: [
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  StreamBuilder<QuerySnapshot>(
-                      stream: FirebaseFirestore.instance
-                          .collection('Reservations')
-                          .where('userId',
-                              isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-                          .snapshots(),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<QuerySnapshot> snapshot) {
-                        if (snapshot.hasError) {
-                          print(snapshot.error);
-                          return const Center(child: Text('Error'));
-                        }
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const Padding(
-                            padding: EdgeInsets.only(top: 50),
-                            child: Center(
-                                child: CircularProgressIndicator(
-                              color: Colors.black,
-                            )),
-                          );
-                        }
+                        )),
+                      );
+                    }
 
-                        final data = snapshot.requireData;
-                        return Expanded(
-                          child: SizedBox(
-                            child: ListView.builder(
-                              itemCount: data.docs.length,
-                              itemBuilder: (context, index) {
-                                return Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 10, bottom: 10, left: 20, right: 20),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      const Icon(
-                                        Icons.calendar_month_outlined,
-                                        size: 48,
-                                      ),
-                                      const SizedBox(
-                                        width: 30,
-                                      ),
-                                      TextBold(
-                                          text: data.docs[index]['name'],
-                                          fontSize: 16,
-                                          color: Colors.black),
-                                      const SizedBox(
-                                        width: 50,
-                                      ),
-                                      TextRegular(
-                                          text: data.docs[index]['date'] +
-                                              ' ' +
-                                              data.docs[index]['time'],
-                                          fontSize: 14,
-                                          color: Colors.black),
-                                      const SizedBox(
-                                        width: 30,
-                                      ),
-                                      IconButton(
-                                        onPressed: () async {
-                                          await FirebaseFirestore.instance
-                                              .collection('Reservations')
-                                              .doc(data.docs[index].id)
-                                              .delete();
-                                        },
-                                        icon: const Icon(
-                                          Icons.delete,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
+                    final data = snapshot.requireData;
+                    return Align(
+                        alignment: Alignment.topRight,
+                        child: PopupMenuButton(
+                          icon: Badge(
+                            backgroundColor: Colors.red,
+                            label: TextRegular(
+                                text: data.docs.length.toString(),
+                                fontSize: 14,
+                                color: Colors.white),
+                            child: const Icon(
+                              Icons.notifications,
+                              color: Colors.grey,
+                              size: 32,
                             ),
                           ),
-                        );
-                      }),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 20, bottom: 20),
-                    child: Align(
-                      alignment: Alignment.topRight,
-                      child: TextButton.icon(
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return const ReservationDialog();
-                            },
+                          itemBuilder: (context) {
+                            return [
+                              for (int i = 0; i < data.docs.length; i++)
+                                PopupMenuItem(
+                                    child: ListTile(
+                                  leading: const Icon(
+                                    Icons.notifications,
+                                    color: Colors.black,
+                                  ),
+                                  title: TextBold(
+                                      text: data.docs[i]['name'],
+                                      fontSize: 16,
+                                      color: Colors.black),
+                                  subtitle: TextRegular(
+                                      text: DateFormat.yMMMd().add_jm().format(
+                                          data.docs[i]['dateTime'].toDate()),
+                                      fontSize: 12,
+                                      color: Colors.black),
+                                ))
+                            ];
+                          },
+                        ));
+                  }),
+              const SizedBox(
+                height: 10,
+              ),
+              Container(
+                height: 300,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Column(
+                  children: [
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    StreamBuilder<QuerySnapshot>(
+                        stream: FirebaseFirestore.instance
+                            .collection('Reservations')
+                            .where('userId',
+                                isEqualTo:
+                                    FirebaseAuth.instance.currentUser!.uid)
+                            .snapshots(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<QuerySnapshot> snapshot) {
+                          if (snapshot.hasError) {
+                            print(snapshot.error);
+                            return const Center(child: Text('Error'));
+                          }
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Padding(
+                              padding: EdgeInsets.only(top: 30),
+                              child: Center(
+                                  child: CircularProgressIndicator(
+                                color: Colors.black,
+                              )),
+                            );
+                          }
+
+                          final data = snapshot.requireData;
+                          return Expanded(
+                            child: Container(
+                              // color: Colors.red,
+                              child: ListView.builder(
+                                itemCount: data.docs.length,
+                                itemBuilder: (context, index) {
+                                  return Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 10, bottom: 10, left: 0, right: 0),
+                                    child: Row(
+                                      // mainAxisAlignment:
+                                      //     MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        const Icon(
+                                          Icons.calendar_month_outlined,
+                                          size: 30,
+                                        ),
+                                        const SizedBox(
+                                          width: 15,
+                                        ),
+                                        TextBold(
+                                            text: data.docs[index]['name'],
+                                            fontSize: 16,
+                                            color: Colors.black),
+                                        const SizedBox(
+                                          width: 25,
+                                        ),
+                                        TextRegular(
+                                            text:
+                                                '${data.docs[index]['date']} \n${data.docs[index]['time']}',
+                                            //  data.docs[index]['date'] +
+                                            //     ' ' +
+                                            //     data.docs[index]['time'],
+                                            fontSize: 14,
+                                            color: Colors.black),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        IconButton(
+                                          onPressed: () async {
+                                            await FirebaseFirestore.instance
+                                                .collection('Reservations')
+                                                .doc(data.docs[index].id)
+                                                .delete();
+                                          },
+                                          icon: const Icon(
+                                            Icons.delete,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
                           );
-                        },
-                        icon: const Icon(
-                          Icons.add,
-                          color: Colors.black,
-                        ),
-                        label: TextBold(
-                          text: 'Create',
-                          fontSize: 18,
-                          color: Colors.black,
+                        }),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 20, bottom: 20),
+                      child: Align(
+                        alignment: Alignment.topRight,
+                        child: TextButton.icon(
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return const ReservationDialog();
+                              },
+                            );
+                          },
+                          icon: const Icon(
+                            Icons.add,
+                            color: Colors.black,
+                          ),
+                          label: TextBold(
+                            text: 'Create',
+                            fontSize: 18,
+                            color: Colors.black,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
