@@ -13,6 +13,7 @@ Future addUser(name, idNumber, password, role) async {
     'role': role,
     'avail': '',
     'isActive': true,
+    'imageUrl': ''
   };
 
   await docUser.set(json);

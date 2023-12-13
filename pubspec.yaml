@@ -45,6 +45,9 @@ dependencies:
   get_storage:
   url_launcher:
   cell_calendar:
+  file_picker: ^6.1.1
+  firebase_storage: ^11.5.6
+  http: ^1.1.0
   # getwidget: ^4.0.0
   mailer: ^6.0.1
 
