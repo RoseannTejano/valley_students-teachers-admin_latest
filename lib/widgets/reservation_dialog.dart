@@ -135,6 +135,7 @@ class _ReservationDialogState extends State<ReservationDialog> {
                   body:
                       'Reservation Name: ${_nameController.text}\nI wanted to make a reservation on ${DateFormat('yyyy-MM-dd').format(_selectedDate!)} at ${DateFormat.jm(_selectedTime)}',
                   subject: 'Requesting a reservation');
+              Navigator.of(context).pop();
             }
           },
           child: const Text(
