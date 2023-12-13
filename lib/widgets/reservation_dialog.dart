@@ -4,7 +4,6 @@ import 'package:url_launcher/url_launcher_string.dart';
 import 'package:valley_students_and_teachers/services/add_reservation.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class ReservationDialog extends StatefulWidget {
@@ -150,10 +149,6 @@ class _ReservationDialogState extends State<ReservationDialog> {
     );
   }
 
-  void main() {
-    sendEmail();
-  }
-
   Future sendEmail(
       {String? subject, String? body, required String mailPath}) async {
     // Replace these values with your email and password
@@ -166,7 +161,7 @@ class _ReservationDialogState extends State<ReservationDialog> {
     // Create a message
     final message = Message()
       ..from = Address(emailcontroller, 'CSPC Library')
-      ..recipients.add(FirebaseAuth.instance.currentUser!.idNumber)
+      ..recipients.add(FirebaseAuth.instance.currentUser!.email)
       ..subject = subject
       ..text = body;
 
