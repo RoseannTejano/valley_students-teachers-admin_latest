@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:valley_students_and_teachers/services/add_reservation.dart';
+import 'package:mailer/mailer.dart';
+import 'package:mailer/smtp_server.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class ReservationDialog extends StatefulWidget {
   const ReservationDialog({super.key});
@@ -127,12 +131,11 @@ class _ReservationDialogState extends State<ReservationDialog> {
                   DateFormat('yyyy-MM-dd').format(_selectedDate!),
                   _selectedTime!.format(context));
 
-              launchEmail(
-                  mailPath: 'roseanntejanoo3021@gmail.com',
+              sendEmail(
+                  mailPath: 'amorosomariaruziel@gmail.com',
                   body:
-                      'Reservation Name: ${_nameController.text}\nI wanted to make a reservation on ${DateFormat('yyyy-MM-dd').format(_selectedDate!)} at _selectedTime!.format(context))',
+                      'Reservation Name: ${_nameController.text}\nI wanted to make a reservation on ${DateFormat('yyyy-MM-dd').format(_selectedDate!)} at ${DateFormat.jm(_selectedTime)}',
                   subject: 'Requesting a reservation');
-              Navigator.of(context).pop();
             }
           },
           child: const Text(
@@ -147,19 +150,49 @@ class _ReservationDialogState extends State<ReservationDialog> {
     );
   }
 
-  void launchEmail(
+  void main() {
+    sendEmail();
+  }
+
+  Future sendEmail(
       {String? subject, String? body, required String mailPath}) async {
-    final Uri emailLaunchUri = Uri(
-      scheme: 'mailto',
-      path: mailPath,
-      queryParameters: {'subject': subject ?? '', 'body': body ?? ''},
-    );
-    if (await canLaunchUrlString(emailLaunchUri.toString())) {
-      await launchUrlString(emailLaunchUri.toString());
-    } else {
-      throw 'Could not launch email';
+    // Replace these values with your email and password
+    final String emailcontroller = mailPath;
+    final String password = 'Amoroso@8_19';
+
+    // Create an SMTP server
+    final smtpServer = gmail(emailcontroller, password);
+
+    // Create a message
+    final message = Message()
+      ..from = Address(emailcontroller, 'CSPC Library')
+      ..recipients.add(FirebaseAuth.instance.currentUser!.idNumber)
+      ..subject = subject
+      ..text = body;
+
+    try {
+      // Send the message
+      final sendReport = await send(message, smtpServer);
+
+      print('Message sent: ' + sendReport.toString());
+    } catch (e) {
+      print('Error occurred: $e');
     }
   }
+
+  // void launchEmail(
+  //     {String? subject, String? body, required String mailPath}) async {
+  //   final Uri emailLaunchUri = Uri(
+  //     scheme: 'mailto',
+  //     path: mailPath,
+  //     queryParameters: {'subject': subject ?? '', 'body': body ?? ''},
+  //   );
+  //   if (await canLaunchUrlString(emailLaunchUri.toString())) {
+  //     await launchUrlString(emailLaunchUri.toString());
+  //   } else {
+  //     throw 'Could not launch email';
+  //   }
+  // }
 
   Future<void> _pickDate(BuildContext context) async {
     DateTime? pickedDate = await showDatePicker(
