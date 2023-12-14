@@ -76,7 +76,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
     }
   }
 
-  var imgUrl = '';
+  var imageUrl = '';
   Future<void> _uploadImg() async {
     final url = Uri.parse('https://api.cloudinary.com/v1_1/dt66q7ysr/upload');
 
@@ -91,11 +91,11 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
 
       setState(() {
         final url = jsonMap['url'];
-        imgUrl = url;
+        imageUrl = url;
       });
-      print(imgUrl);
-      if (imgUrl != '') {
-        updateUser(imgUrl);
+      print(imageUrl);
+      if (imageUrl != '') {
+        updateUser(imageUrl);
       }
     }
   }

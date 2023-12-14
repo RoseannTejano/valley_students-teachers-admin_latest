@@ -13,6 +13,7 @@ import 'package:valley_students_and_teachers/widgets/toast_widget.dart';
 
 class TeachersHomeScreen extends StatefulWidget {
   const TeachersHomeScreen({super.key});
+
   @override
   State<TeachersHomeScreen> createState() => _TeachersHomeScreenState();
 }
@@ -58,6 +59,8 @@ class _TeachersHomeScreenState extends State<TeachersHomeScreen> {
 
   final emailController = TextEditingController();
   final nameController = TextEditingController();
+
+  
 
   @override
   Widget build(BuildContext context) {
