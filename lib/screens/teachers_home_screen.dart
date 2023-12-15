@@ -1,5 +1,9 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:cell_calendar/cell_calendar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -10,6 +14,7 @@ import 'package:valley_students_and_teachers/widgets/schedule_dialog.dart';
 import 'package:valley_students_and_teachers/widgets/text_widget.dart';
 import 'package:valley_students_and_teachers/widgets/textfield_widget.dart';
 import 'package:valley_students_and_teachers/widgets/toast_widget.dart';
+import 'package:http/http.dart' as http;
 
 class TeachersHomeScreen extends StatefulWidget {
   const TeachersHomeScreen({super.key});
@@ -60,7 +65,63 @@ class _TeachersHomeScreenState extends State<TeachersHomeScreen> {
   final emailController = TextEditingController();
   final nameController = TextEditingController();
 
-  
+  DocumentReference userReference = FirebaseFirestore.instance
+      .collection('Users')
+      .doc(FirebaseAuth.instance.currentUser!.uid);
+
+// Example function to update user data
+  Future<void> updateUser(var img) async {
+    try {
+      // Use the update method to update specific fields in the document
+      await userReference.update({
+        'imageUrl': img
+        // Add other fields as needed
+      });
+
+      print('User data updated successfully');
+    } catch (e) {
+      print('Error updating user data: $e');
+    }
+  }
+
+  PlatformFile? pickedFile;
+
+  Future selectFile() async {
+    final result = await FilePicker.platform.pickFiles();
+    if (result == null) return;
+
+    setState(() {
+      pickedFile = result.files.first;
+    });
+
+    if (pickedFile != null) {
+      _uploadImg();
+    }
+  }
+
+  var imgUrl = '';
+  Future<void> _uploadImg() async {
+    final url = Uri.parse('https://api.cloudinary.com/v1_1/dt66q7ysr/upload');
+
+    final request = http.MultipartRequest('POST', url)
+      ..fields['upload_preset'] = 'gkp7yejf'
+      ..files.add(await http.MultipartFile.fromPath('file', pickedFile!.path!));
+    final response = await request.send();
+    if (response.statusCode == 200) {
+      final responseData = await response.stream.toBytes();
+      final responseString = String.fromCharCodes(responseData);
+      final jsonMap = jsonDecode(responseString);
+
+      setState(() {
+        final url = jsonMap['url'];
+        imgUrl = url;
+      });
+      print(imgUrl);
+      if (imgUrl != '') {
+        updateUser(imgUrl);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -124,10 +185,55 @@ class _TeachersHomeScreenState extends State<TeachersHomeScreen> {
                         const SizedBox(
                           height: 50,
                         ),
-                        Image.asset(
-                          'assets/images/avatar.png',
-                          height: 125,
-                        ),
+                        InkWell(
+                            onTap: () {
+                              // updateUser();
+                              selectFile();
+                              // print(data['imageUrl']);
+                            },
+                            child: CircleAvatar(
+                              backgroundColor: Colors.transparent,
+                              radius: 90,
+                              child: Center(
+                                child: Stack(
+                                  children: [
+                                    Container(
+                                      child: data['imageUrl'].isNotEmpty
+                                          ? CircleAvatar(
+                                              radius: 90,
+                                              backgroundImage: NetworkImage(
+                                                  data['imageUrl']),
+                                            )
+                                          : pickedFile != null
+                                              ? ClipOval(
+                                                  child: Image.file(
+                                                  File(pickedFile!.path!),
+                                                  width:
+                                                      200.0, // Adjust the width as needed
+                                                  height:
+                                                      200.0, // Adjust the height as needed
+                                                  fit: BoxFit.cover,
+                                                ))
+                                              : Image.asset(
+                                                  'assets/images/avatar.png',
+                                                  height: 200,
+                                                ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          right: 20.0, bottom: 15),
+                                      child: Align(
+                                          alignment: Alignment.bottomRight,
+                                          child: Icon(
+                                            Icons.camera_alt,
+                                            size: 50,
+                                            color: Colors.grey.withOpacity(0.8),
+                                          )),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            )),
                         const SizedBox(
                           height: 20,
                         ),
