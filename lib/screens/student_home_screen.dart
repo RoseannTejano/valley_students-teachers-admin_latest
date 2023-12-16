@@ -841,19 +841,15 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                           members[i]['name'],
                           'You have been added to a consultation',
                           members[i]['userId']);
-                      final Uri emailLaunchUri = Uri(
-                        scheme: 'mailto',
-                        path: members[i]['email'],
-                        queryParameters: {
-                          'subject': 'Added to consultation',
-                          'body': ''
-                        },
-                      );
-                      if (await canLaunchUrlString(emailLaunchUri.toString())) {
-                        await launchUrlString(emailLaunchUri.toString());
-                      } else {
-                        throw 'Could not launch email';
-                      }
+
+
+                            sendEmail(
+                  mailPath: 'amorosomariaruziel@gmail.com',
+                  body:'' ,
+                  subject: 'Added to consultation',
+                  receiver: members[i]['email']);
+              Navigator.of(context).pop();
+            } 
                     }
                   }
                   members.clear();
@@ -1212,5 +1208,33 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
         );
       },
     );
+  }
+
+
+  
+  Future<void> sendEmail(
+      {String? subject,String? receiver, String? body, required String mailPath}) async {
+    // Replace these values with receiver email and password
+    final String emailcontroller = mailPath;
+    final String password = 'Amoroso@8_19';
+
+    // Create an SMTP server
+    final smtpServer = gmail(emailcontroller, password);
+
+    // Create a message
+    final message = Message()
+      ..from = Address(emailcontroller, 'CSPC Library')
+      ..recipients.add(receiver)
+      ..subject = subject
+      ..text = body;
+
+    try {
+      // Send the message
+      final sendReport = await send(message, smtpServer);
+
+      print('Message sent: ' + sendReport.toString());
+    } catch (e) {
+      print('Error occurred: $e');
+    }
   }
 }

@@ -150,7 +150,7 @@ class _ReservationDialogState extends State<ReservationDialog> {
     );
   }
 
-  Future sendEmail(
+  Future<void> sendEmail(
       {String? subject, String? body, required String mailPath}) async {
     // Replace these values with your email and password
     final String emailcontroller = mailPath;
