@@ -604,9 +604,9 @@ class _TeachersHomeScreenState extends State<TeachersHomeScreen> {
               height: 20,
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 50),
+              padding: const EdgeInsets.only(left: 20),
               child: Container(
-                height: 300,
+                height: 250,
                 width: double.infinity,
                 decoration: BoxDecoration(
                   color: Colors.white,

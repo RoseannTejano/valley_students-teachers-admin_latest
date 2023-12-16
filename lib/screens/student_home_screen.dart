@@ -199,9 +199,9 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                                             alignment: Alignment.bottomRight,
                                             child: Icon(
                                               Icons.camera_alt,
-                                              size: 50,
+                                              size: 40,
                                               color:
-                                                  Colors.grey.withOpacity(0.8),
+                                                  Color.fromARGB(255, 180, 180, 180).withOpacity(0.7),
                                             )),
                                       ),
                                     ],
@@ -334,13 +334,13 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                             height: 20,
                           ),
                           const Padding(
-                            padding: EdgeInsets.only(left: 75, right: 75),
+                            padding: EdgeInsets.only(left: 100, right: 150),
                             child: Divider(
                               color: Colors.white,
                             ),
                           ),
                           const SizedBox(
-                            height: 20,
+                            height: 10,
                           ),
                           GestureDetector(
                             onTap: () {
@@ -381,7 +381,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                             height: 20,
                           ),
                           const Padding(
-                            padding: EdgeInsets.only(left: 75, right: 75),
+                            padding: EdgeInsets.only(left: 150, right: 150),
                             child: Divider(
                               color: Colors.white,
                             ),
@@ -389,13 +389,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                           const SizedBox(
                             height: 20,
                           ),
-                          ButtonWidget(
-                            label: 'View Faculty Workload',
-                            onPressed: () {
-                              Navigator.pushNamed(
-                                  context, Routes().teacherlist);
-                            },
-                          ),
+                        
                         ],
                       ),
                     );
@@ -434,7 +428,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                   }
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Padding(
-                      padding: EdgeInsets.only(top: 50),
+                      padding: EdgeInsets.only(top: 10),
                       child: Center(
                           child: CircularProgressIndicator(
                         color: Colors.black,
@@ -586,7 +580,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                                                     data.docs[index]['messages']
                                                             .length -
                                                         1]['msg']
-                                                : 'No message yet...',
+                                                : 'No messages yet',
                                             fontSize: 11,
                                             color: Colors.black),
                                         const SizedBox(
@@ -681,7 +675,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
               child: Column(
                 children: [
                   SizedBox(
-                    height: 180,
+                    height: 150,
                     width: 300,
                     child: StreamBuilder<QuerySnapshot>(
                         stream: FirebaseFirestore.instance
@@ -770,11 +764,11 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                           ListTile(
                             leading: const Icon(
                               Icons.account_circle_outlined,
-                              size: 32,
+                              size: 30,
                             ),
-                            title: TextBold(
+                            title: TextRegular(
                                 text: members[i]['name'],
-                                fontSize: 16,
+                                fontSize: 14,
                                 color: Colors.black),
                             subtitle: TextRegular(
                                 text: members[i]['role'],
@@ -806,7 +800,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                 child: TextBold(
                   text: 'Close',
                   fontSize: 14,
-                  color: Colors.grey,
+                  color: const Color.fromARGB(255, 2, 2, 2),
                 ),
               ),
               TextButton(
@@ -841,15 +835,19 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                           members[i]['name'],
                           'You have been added to a consultation',
                           members[i]['userId']);
-
-
-                            sendEmail(
-                              mailPath: 'amorosomariaruziel@gmail.com',
-                              body:'' ,
-                              subject: 'Added to consultation',
-                              receiver: members[i]['email']);
-                          Navigator.of(context).pop();
-                        } 
+                      final Uri emailLaunchUri = Uri(
+                        scheme: 'mailto',
+                        path: members[i]['email'],
+                        queryParameters: {
+                          'subject': 'Added to consultation',
+                          'body': ''
+                        },
+                      );
+                      if (await canLaunchUrlString(emailLaunchUri.toString())) {
+                        await launchUrlString(emailLaunchUri.toString());
+                      } else {
+                        throw 'Could not launch email';
+                      }
                     }
                   }
                   members.clear();
@@ -986,7 +984,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                                 itemBuilder: (context, index) {
                                   return Padding(
                                     padding: const EdgeInsets.only(
-                                        top: 10, bottom: 10, left: 0, right: 0),
+                                        top: 13, bottom: 13, left: 2, right: 2),
                                     child: Row(
                                       // mainAxisAlignment:
                                       //     MainAxisAlignment.start,
@@ -1056,7 +1054,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                           ),
                           label: TextBold(
                             text: 'Create',
-                            fontSize: 18,
+                            fontSize: 11,
                             color: Colors.black,
                           ),
                         ),
@@ -1208,33 +1206,5 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
         );
       },
     );
-  }
-
-
-  
-  Future<void> sendEmail(
-      {String? subject,String? receiver, String? body, required String mailPath}) async {
-    // Replace these values with receiver email and password
-    final String emailcontroller = mailPath;
-    final String password = 'Amoroso@8_19';
-
-    // Create an SMTP server
-    final smtpServer = gmail(emailcontroller, password);
-
-    // Create a message
-    final message = Message()
-      ..from = Address(emailcontroller, 'CSPC Library')
-      ..recipients.add(receiver)
-      ..subject = subject
-      ..text = body;
-
-    try {
-      // Send the message
-      final sendReport = await send(message, smtpServer);
-
-      print('Message sent: ' + sendReport.toString());
-    } catch (e) {
-      print('Error occurred: $e');
-    }
   }
 }

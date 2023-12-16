@@ -60,7 +60,7 @@ class _AdminHomeState extends State<AdminHome> {
                           radius: 100,
                           height: 60,
                           color: Colors.white,
-                          label: 'Register',
+                          label:'Register',
                           onPressed: () {
                             registerDialog();
                             // Navigator.pushNamed(context, Routes().adminstudent);
@@ -155,7 +155,7 @@ class _AdminHomeState extends State<AdminHome> {
                                 return ListTile(
                                   title: TextRegular(
                                       text:
-                                          'Title: ${data.docs[index]['description']}',
+                                          'Description: ${data.docs[index]['description']}',
                                       fontSize: 12,
                                       color: Colors.black),
                                   trailing: SizedBox(
@@ -296,7 +296,7 @@ class _AdminHomeState extends State<AdminHome> {
                         height: 10,
                       ),
                       TextFieldWidget(
-                          label: 'Email', controller: emailController),
+                          label: 'UserId', controller: emailController),
                       const SizedBox(
                         height: 10,
                       ),
