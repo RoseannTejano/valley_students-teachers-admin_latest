@@ -573,18 +573,6 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                                         const SizedBox(
                                           width: 5,
                                         ),
-<<<<<<< HEAD
-                                        TextBold(
-                                            text: data.docs[index]['messages']
-                                                    .isNotEmpty
-                                                ? data.docs[index]['messages'][
-                                                    data.docs[index]['messages']
-                                                            .length -
-                                                        1]['msg']
-                                                : 'No messages yet',
-                                            fontSize: 11,
-                                            color: Colors.black),
-=======
                                         Container(
                                           width: deviceSize.width * .2,
                                           child: TextBold(
@@ -600,7 +588,6 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                                               fontSize: 11,
                                               color: Colors.black),
                                         ),
->>>>>>> 938477d8c8193da8312f2bf556e6f5699acf618e
                                         const SizedBox(
                                           width: 20,
                                         ),
