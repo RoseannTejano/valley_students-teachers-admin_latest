@@ -844,12 +844,12 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
 
 
                             sendEmail(
-                  mailPath: 'amorosomariaruziel@gmail.com',
-                  body:'' ,
-                  subject: 'Added to consultation',
-                  receiver: members[i]['email']);
-              Navigator.of(context).pop();
-            } 
+                              mailPath: 'amorosomariaruziel@gmail.com',
+                              body:'' ,
+                              subject: 'Added to consultation',
+                              receiver: members[i]['email']);
+                          Navigator.of(context).pop();
+                        } 
                     }
                   }
                   members.clear();
