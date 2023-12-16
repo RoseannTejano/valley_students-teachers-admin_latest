@@ -570,7 +570,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                                     },
                                     child: Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         const Icon(
                                           Icons.chat,
@@ -579,16 +579,21 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                                         const SizedBox(
                                           width: 5,
                                         ),
-                                        TextBold(
-                                            text: data.docs[index]['messages']
-                                                    .isNotEmpty
-                                                ? data.docs[index]['messages'][
-                                                    data.docs[index]['messages']
-                                                            .length -
-                                                        1]['msg']
-                                                : 'No message yet...',
-                                            fontSize: 11,
-                                            color: Colors.black),
+                                        Container(
+                                          width: deviceSize.width * .2,
+                                          child: TextBold(
+                                              text: data.docs[index]['messages']
+                                                      .isNotEmpty
+                                                  ? data.docs[index]['messages']
+                                                      [data
+                                                              .docs[index]
+                                                                  ['messages']
+                                                              .length -
+                                                          1]['name']
+                                                  : 'No message yet...',
+                                              fontSize: 11,
+                                              color: Colors.black),
+                                        ),
                                         const SizedBox(
                                           width: 20,
                                         ),
